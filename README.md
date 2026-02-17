@@ -1,7 +1,7 @@
 # Simply Optimised
 
 # Client Commands
-NEEDS TOGGLE TO BE ON
+NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
 -- e_ui (shows ui)
 -- e_immortality_toggle (toggles image of teto)
