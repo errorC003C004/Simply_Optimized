@@ -11,15 +11,20 @@ NEEDS WHITELIST
 
 -- error_op/deop user (Gives/Removes user stated op)
 
+-- error_run (Runs a normal command as the server)
+
+
 -- error_whitelist list (Lists all players on Whitelist)
 
 -- error_whitelist add/remove (Remove/Add Whitelist to user)
 
--- error_run (Runs a normal command as the server)
+
 
 -- error_immortal user opt:on/off/toggle (Gives a user immortality/user doesnt go below one heart)
 -- error_boom range opt:size (Explodes like a gun, default size is 4)
+
 ANYONE CAN RUN
 
 -- simply_fix (Adds user who runs this to Whitelist/Detected Clients if user is in frozen state)
+
 -- simply_reload (Loads Config)
