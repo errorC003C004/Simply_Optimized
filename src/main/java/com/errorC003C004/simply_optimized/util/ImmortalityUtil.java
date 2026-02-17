@@ -1,5 +1,6 @@
 package com.errorC003C004.simply_optimized.util;
 
+import com.errorC003C004.simply_optimized.ConfigManager;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -45,29 +46,29 @@ public class ImmortalityUtil {
     }
 
     private static boolean isImmortal(ServerPlayerEntity player) {
-        return CommandInit.isImmortal(player.getUuid());
+        return ConfigManager.isImmortal(player.getUuid());
     }
 
     public static boolean togglePlayer(ServerPlayerEntity player) {
         UUID id = player.getUuid();
 
-        if (CommandInit.isImmortal(id)) {
-            CommandInit.removeImmortal(id);
+        if (ConfigManager.isImmortal(id)) {
+            ConfigManager.removeImmortal(id);
             return false;
         } else {
-            CommandInit.addImmortal(id);
+            ConfigManager.addImmortal(id);
             return true;
         }
     }
 
     public static void ImmortalOff(ServerPlayerEntity player) {
         UUID id = player.getUuid();
-        if (CommandInit.isImmortal(id)) {
-            CommandInit.removeImmortal(id);
+        if (ConfigManager.isImmortal(id)) {
+            ConfigManager.removeImmortal(id);
         }
     }
 
     public static void ImmortalOn(ServerPlayerEntity player) {
-        CommandInit.addImmortal(player.getUuid());
+        ConfigManager.addImmortal(player.getUuid());
     }
 }

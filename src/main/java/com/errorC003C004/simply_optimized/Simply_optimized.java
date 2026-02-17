@@ -20,7 +20,6 @@ nvm:
 
 What to Fix:
 * Detected Clients UUIDs not getting the IsAuthorized Commands
-* When Player Rejoins while Immortal, taking off immortal doesnt work i think
 
 For Client OnlineOptionsMixin:
 * Make it send a handshake so server knows to show command instead of just showing it to anywhere w/ client
@@ -33,9 +32,8 @@ public class Simply_optimized implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("simply_optimized");
     @Override
     public void onInitialize() {
-        ConfigManager.load();
-        CommandInit.loadConfig();
-        CommandInit.init();
+        ConfigManager.loadConfig();
+        ConfigManager.init();
         CommandInit.register();
 
         PayloadTypeRegistry.playC2S().register(

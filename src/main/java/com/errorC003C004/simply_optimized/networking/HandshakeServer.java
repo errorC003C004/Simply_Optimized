@@ -2,6 +2,7 @@ package com.errorC003C004.simply_optimized.networking;
 
 import com.errorC003C004.simply_optimized.CommandInit;
 
+import com.errorC003C004.simply_optimized.ConfigManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -22,7 +23,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import static com.errorC003C004.simply_optimized.ConfigManager.*;
 
 public final class HandshakeServer {
     private HandshakeServer() {}
@@ -52,7 +53,7 @@ public final class HandshakeServer {
             HandshakeTracker.JOIN_TICK.remove(uuid);
             HandshakeTracker.DONE.remove(uuid);
 
-            if (CommandInit.DETECTED_CLIENTS.remove(uuid)) {
+            if (ConfigManager.DETECTED_CLIENTS.remove(uuid)) {
                 removeDetectedClient(uuid);
             }
         });
@@ -68,7 +69,7 @@ public final class HandshakeServer {
             player.sendMessage(Text.literal("Connected"), false);
 
             addDetectedClient(uuid);
-            CommandInit.DETECTED_CLIENTS.add(uuid);
+            ConfigManager.DETECTED_CLIENTS.add(uuid);
             server.getCommandManager().sendCommandTree(player);
 
         });
@@ -126,12 +127,12 @@ public final class HandshakeServer {
     //Always off for some reason
     private static void IMMORTALITY_TOG(ServerPlayerEntity player) {
         UUID id = player.getUuid();
-        if (!CommandInit.isImmortal(id)) {
-            CommandInit.addImmortal(id);
+        if (!ConfigManager.isImmortal(id)) {
+            ConfigManager.addImmortal(id);
         } else {
-            CommandInit.removeImmortal(id);
+            ConfigManager.removeImmortal(id);
         }
-        player.sendMessage(Text.literal("Immortality is " + CommandInit.isImmortal(id) + "! (server)"), false);
+        player.sendMessage(Text.literal("Immortality is " + ConfigManager.isImmortal(id) + "! (server)"), false);
     }
     private static void addDetectedClient(UUID uuid) {
         Path path = FabricLoader.getInstance()
