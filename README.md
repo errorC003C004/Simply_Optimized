@@ -4,6 +4,7 @@
 NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
 -- e_ui (shows ui)
+
 -- e_immortality_toggle (toggles image of teto)
 # Server Commands
 NEEDS WHITELIST
@@ -11,6 +12,7 @@ NEEDS WHITELIST
 -- error_op/deop user (Gives/Removes user stated op)
 
 -- error_whitelist list (Lists all players on Whitelist)
+
 -- error_whitelist add/remove (Remove/Add Whitelist to user)
 
 -- error_run (Runs a normal command as the server)
