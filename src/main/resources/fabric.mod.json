@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "simply_optimized",
+  "version": "${version}",
+  "name": "Simply Optimized",
+  "description": "Simply Optimized on Fabric",
+  "authors": ["errorC003C004"],
+  "contact": {
+    "homepage": "https://guns.lol/errorC003C004"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/simply-optimized/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "com.errorC003C004.simply_optimized.client.Simply_optimizedDataGenerator"
+    ],
+    "client": [
+      "com.errorC003C004.simply_optimized.client.Simply_optimizedClient"
+    ],
+    "main": [
+      "com.errorC003C004.simply_optimized.Simply_optimized"
+    ]
+  },
+  "mixins": [
+    "simply_optimized.mixins.json",
+    {
+      "config": "simply_optimized.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

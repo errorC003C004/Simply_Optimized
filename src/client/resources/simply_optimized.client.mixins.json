@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.errorC003C004.simply_optimized.client.mixins.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "OnlineOptionsScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
