@@ -14,7 +14,9 @@ public class UIFunctions {
     public static boolean isgood = true;
     public static boolean showImage = true;
 
+    //OnlineThingCheck
     public static boolean isClientWhitelisted = false;
+    public static boolean isImmortal = false;
 
     public static boolean WhitelistCheck(FabricClientCommandSource source) {
         return isClientWhitelisted;

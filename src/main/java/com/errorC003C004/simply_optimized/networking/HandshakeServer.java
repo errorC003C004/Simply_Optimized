@@ -23,7 +23,6 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static com.errorC003C004.simply_optimized.ConfigManager.*;
 
 public final class HandshakeServer {
     private HandshakeServer() {}
@@ -38,7 +37,6 @@ public final class HandshakeServer {
     private static final String FILE_NAME = "Simply_Optimised.json";
 
     public static void init() {
-
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             ServerPlayerEntity player = handler.getPlayer();
             UUID uuid = player.getUuid();
@@ -58,21 +56,24 @@ public final class HandshakeServer {
             }
         });
 
+        // HANDSHAKE RECEIVER
         ServerPlayNetworking.registerGlobalReceiver(PingPayload.ID, (payload, context) -> {
+
             ServerPlayerEntity player = context.player();
             MinecraftServer server = player.getCommandSource().getServer();
             UUID uuid = player.getUuid();
 
             if (HandshakeTracker.DONE.getOrDefault(uuid, false)) return;
 
-            HandshakeTracker.DONE.put(uuid, true);
-            player.sendMessage(Text.literal("Connected"), false);
+            context.server().execute(() -> {
 
-            addDetectedClient(uuid);
-            ConfigManager.DETECTED_CLIENTS.add(uuid);
-            server.getCommandManager().sendCommandTree(player);
-
+                HandshakeTracker.DONE.put(uuid, true);
+                player.sendMessage(Text.literal("Connected!"), false);
+                addDetectedClient(uuid);
+            });
         });
+
+        // EXISTING CLIENT ACTION RECEIVER
         ServerPlayNetworking.registerGlobalReceiver(
                 ClientActionPayload.ID,
                 (payload, context) -> {
@@ -85,20 +86,11 @@ public final class HandshakeServer {
 
                             case IMMORTALITY_TOGGLE -> IMMORTALITY_TOG(player);
 
+                            case TOGGLE_FEATURE ->
+                                    player.sendMessage(Text.literal("Feature toggled"), false);
 
-                            case TOGGLE_FEATURE -> {
-                                player.sendMessage(
-                                        Text.literal("Feature toggled"),
-                                        false
-                                );
-                            }
-
-                            case OPEN_MENU -> {
-                                player.sendMessage(
-                                        Text.literal("Menu opened"),
-                                        false
-                                );
-                            }
+                            case OPEN_MENU ->
+                                    player.sendMessage(Text.literal("Menu opened"), false);
                         }
                     });
                 }
@@ -115,25 +107,36 @@ public final class HandshakeServer {
                 boolean done = HandshakeTracker.DONE.getOrDefault(uuid, false);
                 if (done) continue;
 
-                // 100 ticks = 5 seconds
                 if (tickCounter - joinTick >= 100) {
                     HandshakeTracker.DONE.put(uuid, true);
-                    // player.sendMessage(Text.literal("Not Detected"), false);
                 }
             }
         });
     }
 
-    //Always off for some reason
+    // ===== existing methods unchanged =====
+
     private static void IMMORTALITY_TOG(ServerPlayerEntity player) {
         UUID id = player.getUuid();
+
         if (!ConfigManager.isImmortal(id)) {
             ConfigManager.addImmortal(id);
         } else {
             ConfigManager.removeImmortal(id);
         }
-        player.sendMessage(Text.literal("Immortality is " + ConfigManager.isImmortal(id) + "! (server)"), false);
+        boolean immortal = ConfigManager.isImmortal(id);
+        ServerPlayNetworking.send(
+                player,
+                new ImmortalityStatusPayload(immortal)
+        );
+
+        player.sendMessage(
+                Text.literal("Immortality is " + ConfigManager.isImmortal(id) + "! (server)"),
+                false
+        );
     }
+
+
     private static void addDetectedClient(UUID uuid) {
         Path path = FabricLoader.getInstance()
                 .getConfigDir()

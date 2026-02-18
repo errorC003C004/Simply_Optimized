@@ -48,6 +48,10 @@ public class ConfigManager {
         return IMMORTAL_PLAYERS.contains(player);
     }
 
+    public static Set<UUID> getImmortalPlayers() {
+        return Set.copyOf(IMMORTAL_PLAYERS);
+    }
+
     public static void loadConfig() {
         try {
 
@@ -172,6 +176,10 @@ public class ConfigManager {
     }
 
     public static boolean isAuthorized(ServerCommandSource source) {
+        /*
+        if (!whitelistbool)
+            return false;
+        */
         if (!(source.getEntity() instanceof ServerPlayerEntity player))
             return false;
 

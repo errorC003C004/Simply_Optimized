@@ -12,17 +12,12 @@ import org.slf4j.LoggerFactory;
 
 
 What to Add:
-*
-
-
-nvm:
-* I think I been sending chat logs to actual chat and not client's chat box.
+* Handshake to Detect Whitelist Option in Settings.
+-- Makes all "error_" Commands only show if its enabled
+-- If Owners install it then they dont see it
 
 What to Fix:
-* Detected Clients UUIDs not getting the IsAuthorized Commands
 
-For Client OnlineOptionsMixin:
-* Make it send a handshake so server knows to show command instead of just showing it to anywhere w/ client
 
 Make isAuthorized check the button
 
@@ -40,12 +35,14 @@ public class Simply_optimized implements ModInitializer {
                 PingPayload.ID,
                 PingPayload.CODEC
         );
-
+        PayloadTypeRegistry.playS2C().register(
+                ImmortalityStatusPayload.ID,
+                ImmortalityStatusPayload.CODEC
+        );
         PayloadTypeRegistry.playC2S().register(
                 ClientActionPayload.ID,
                 ClientActionPayload.CODEC
         );
-
         HandshakeServer.init();
 
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
