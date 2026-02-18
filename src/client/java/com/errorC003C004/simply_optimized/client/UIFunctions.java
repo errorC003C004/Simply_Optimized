@@ -24,15 +24,14 @@ public class UIFunctions {
 
     //Buttons
     public static void immortalitybutton(MinecraftClient client) {
-        System.out.println("Button pressed");
+        System.out.println("Button pressed, Immortality");
         if (client == null || client.player == null || client.getNetworkHandler() == null) {
             return;
         }
 
         ClientPlayNetworking.send(new ClientActionPayload(ClientActionPayload.Action.IMMORTALITY_TOGGLE));
 
-
-        client.player.sendMessage(Text.literal("Did Thing (Client)"), false);
+        //client.player.sendMessage(Text.literal("Immortality (Client)"), false);
     }
 
 

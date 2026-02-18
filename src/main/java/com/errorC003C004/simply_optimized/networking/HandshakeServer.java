@@ -56,24 +56,20 @@ public final class HandshakeServer {
             }
         });
 
-        // HANDSHAKE RECEIVER
         ServerPlayNetworking.registerGlobalReceiver(PingPayload.ID, (payload, context) -> {
 
             ServerPlayerEntity player = context.player();
-            MinecraftServer server = player.getCommandSource().getServer();
             UUID uuid = player.getUuid();
 
             if (HandshakeTracker.DONE.getOrDefault(uuid, false)) return;
 
             context.server().execute(() -> {
-
                 HandshakeTracker.DONE.put(uuid, true);
                 player.sendMessage(Text.literal("Connected!"), false);
                 addDetectedClient(uuid);
             });
         });
 
-        // EXISTING CLIENT ACTION RECEIVER
         ServerPlayNetworking.registerGlobalReceiver(
                 ClientActionPayload.ID,
                 (payload, context) -> {
@@ -114,24 +110,27 @@ public final class HandshakeServer {
         });
     }
 
-    // ===== existing methods unchanged =====
 
     private static void IMMORTALITY_TOG(ServerPlayerEntity player) {
         UUID id = player.getUuid();
 
+        boolean immortal;
+
         if (!ConfigManager.isImmortal(id)) {
             ConfigManager.addImmortal(id);
+            immortal = true;
         } else {
             ConfigManager.removeImmortal(id);
+            immortal = false;
         }
-        boolean immortal = ConfigManager.isImmortal(id);
+
         ServerPlayNetworking.send(
                 player,
                 new ImmortalityStatusPayload(immortal)
         );
 
         player.sendMessage(
-                Text.literal("Immortality is " + ConfigManager.isImmortal(id) + "! (server)"),
+                Text.literal("Immortality is " + immortal + "! (server)"),
                 false
         );
     }
@@ -153,11 +152,11 @@ public final class HandshakeServer {
                 root = new JsonObject();
             }
 
-            JsonArray detected = root.has("Detected Clients")
-                    ? root.getAsJsonArray("Detected Clients")
+            JsonArray detected = root.has("detected_clients")
+                    ? root.getAsJsonArray("detected_clients")
                     : new JsonArray();
 
-            root.add("Detected Clients", detected);
+            root.add("detected_clients", detected);
 
             String uuidString = uuid.toString();
 
@@ -173,6 +172,7 @@ public final class HandshakeServer {
                 detected.add(uuidString);
                 Files.writeString(path, GSON.toJson(root));
             }
+            ConfigManager.saveConfig();
 
         } catch (Exception e) {
             LOGGER.error("[SimplyOptimised] Error creating HandshakeServer.addDetectedClient", e);
@@ -189,9 +189,9 @@ public final class HandshakeServer {
             String json = Files.readString(path);
             JsonObject root = GSON.fromJson(json, JsonObject.class);
 
-            if (root == null || !root.has("Detected Clients")) return;
+            if (root == null || !root.has("detected_clients")) return;
 
-            JsonArray detected = root.getAsJsonArray("Detected Clients");
+            JsonArray detected = root.getAsJsonArray("detected_clients");
             String uuidString = uuid.toString();
 
             JsonArray updated = new JsonArray();
@@ -208,9 +208,10 @@ public final class HandshakeServer {
             }
 
             if (changed) {
-                root.add("Detected Clients", updated);
+                root.add("detected_clients", updated);
                 Files.writeString(path, GSON.toJson(root));
             }
+            ConfigManager.saveConfig();
 
         } catch (Exception e) {
             LOGGER.error("[SimplyOptimised] Error creating HandshakeServer.removeDetectedClient", e);

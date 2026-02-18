@@ -17,7 +17,9 @@ public class Simply_optimizedClient implements ClientModInitializer {
 
         // Existing handshake ping
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            ClientPlayNetworking.send(new PingPayload());
+            if (UIFunctions.isClientWhitelisted) {
+                ClientPlayNetworking.send(new PingPayload());
+            }
         });
 
         // Receive immortality updates

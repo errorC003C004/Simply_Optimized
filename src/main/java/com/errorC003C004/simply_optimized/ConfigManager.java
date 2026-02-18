@@ -70,7 +70,6 @@ public class ConfigManager {
                 return;
             }
 
-            // ===== LOAD ALLOWED UUIDS =====
             ALLOWED_UUIDS.clear();
             if (json.has("allowed_uuids")) {
                 JsonArray allowedArray = json.getAsJsonArray("allowed_uuids");
@@ -79,16 +78,14 @@ public class ConfigManager {
                 }
             }
 
-            // ===== LOAD DETECTED CLIENTS =====
             DETECTED_CLIENTS.clear();
-            if (json.has("Detected Clients")) {
-                JsonArray detectedArray = json.getAsJsonArray("Detected Clients");
+            if (json.has("detected_clients")) {
+                JsonArray detectedArray = json.getAsJsonArray("detected_clients");
                 for (int i = 0; i < detectedArray.size(); i++) {
                     DETECTED_CLIENTS.add(UUID.fromString(detectedArray.get(i).getAsString()));
                 }
             }
 
-            // ===== LOAD IMMORTAL PLAYERS =====
             IMMORTAL_PLAYERS.clear();
             if (json.has("immortal_players")) {
                 JsonArray immortalArray = json.getAsJsonArray("immortal_players");
@@ -101,6 +98,7 @@ public class ConfigManager {
                     + ALLOWED_UUIDS.size() + " allowed UUIDs, "
                     + DETECTED_CLIENTS.size() + " detected clients, "
                     + IMMORTAL_PLAYERS.size() + " immortal players.");
+
 
         } catch (Exception e) {
             LOGGER.error("[SimplyOptimised] Config corrupted. Recreating.", e);
@@ -124,7 +122,7 @@ public class ConfigManager {
             for (UUID uuid : DETECTED_CLIENTS) {
                 detectedArray.add(uuid.toString());
             }
-            json.add("Detected Clients", detectedArray);
+            json.add("detected_clients", detectedArray);
 
             // ===== SAVE IMMORTAL PLAYERS =====
             JsonArray immortalArray = new JsonArray();
@@ -148,12 +146,9 @@ public class ConfigManager {
         try {
             JsonObject json = new JsonObject();
 
-            JsonArray allowedArray = new JsonArray();
-            //allowedArray.add("f093b6f8-b062-4764-abb0-a3d6d7cd727a");
-            allowedArray.add("baf382d2-8686-4b4c-b4b8-fe8ef9ebfca6");
 
-            json.add("allowed_uuids", allowedArray);
-            json.add("Detected Clients", new JsonArray());
+            json.add("allowed_uuids", new JsonArray());
+            json.add("detected_clients", new JsonArray());
             json.add("immortal_players", new JsonArray());
 
             try (FileWriter writer = new FileWriter(CONFIG_PATH.toFile())) {
@@ -161,10 +156,6 @@ public class ConfigManager {
             }
 
             ALLOWED_UUIDS.clear();
-            for (int i = 0; i < allowedArray.size(); i++) {
-                ALLOWED_UUIDS.add(UUID.fromString(allowedArray.get(i).getAsString()));
-            }
-
             DETECTED_CLIENTS.clear();
             IMMORTAL_PLAYERS.clear();
 
@@ -176,10 +167,6 @@ public class ConfigManager {
     }
 
     public static boolean isAuthorized(ServerCommandSource source) {
-        /*
-        if (!whitelistbool)
-            return false;
-        */
         if (!(source.getEntity() instanceof ServerPlayerEntity player))
             return false;
 

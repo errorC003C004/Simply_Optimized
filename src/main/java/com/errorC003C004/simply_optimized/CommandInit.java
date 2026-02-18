@@ -236,7 +236,6 @@ public class CommandInit {
                             CommandManager.literal("simply_reload")
                                     .executes(context -> {
                                         ConfigManager.loadConfig();
-                                        //getDetectedClients();
                                         context.getSource().sendFeedback(
                                                 () -> Text.literal("Reloaded!"),
                                                 false
