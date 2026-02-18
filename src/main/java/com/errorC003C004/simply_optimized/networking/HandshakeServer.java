@@ -130,7 +130,7 @@ public final class HandshakeServer {
         );
 
         player.sendMessage(
-                Text.literal("Immortality is " + immortal + "! (server)"),
+                Text.literal("Immortality is " + immortal + "!"),
                 false
         );
     }
