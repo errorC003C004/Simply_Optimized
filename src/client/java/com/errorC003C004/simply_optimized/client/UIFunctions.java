@@ -6,25 +6,34 @@ import net.minecraft.client.MinecraftClient;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import com.errorC003C004.simply_optimized.networking.ClientActionPayload;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UIFunctions {
-    //Bools
-    public static boolean isgood = true;
-    public static boolean showImage = true;
+    public static final Logger LOGGER = LoggerFactory.getLogger("simply_optimized");
 
     //OnlineThingCheck
-    public static boolean isClientWhitelisted = false;
     public static boolean isImmortal = false;
 
     public static boolean WhitelistCheck(FabricClientCommandSource source) {
-        return isClientWhitelisted;
+        return ConfigManagerClient.isClientWhitelisted;
     }
 
     //Buttons
+    public static void immagebutton() {
+        LOGGER.info("Button pressed, Image");
+        //Do same as ConfigManagerClient.showImage = !ConfigManagerClient.showImage
+        if (ConfigManagerClient.showImage) {
+            ConfigManagerClient.showImageFalse();
+        } else {
+            ConfigManagerClient.showImageTrue();
+        }
+
+    }
+
     public static void immortalitybutton(MinecraftClient client) {
-        System.out.println("Button pressed, Immortality");
+        LOGGER.info("Button pressed, Immortality");
         if (client == null || client.player == null || client.getNetworkHandler() == null) {
             return;
         }
@@ -33,22 +42,21 @@ public class UIFunctions {
 
     }
 
-
     public static void clientWhitelist(ButtonWidget button) {
-        isClientWhitelisted = !isClientWhitelisted;
-
+        if (ConfigManagerClient.isClientWhitelisted) {
+            ConfigManagerClient.removeClientWhitelist();
+        }
+        else {
+            ConfigManagerClient.addClientWhitelist();
+        }
         button.setMessage(Text.literal(getWhitelistText()));
 
-        System.out.println(
-                "Is Client Whitelisted is now " + isClientWhitelisted
-        );
+        LOGGER.info("Is Client Whitelisted is now " + ConfigManagerClient.isClientWhitelisted);
     }
-
-
 
     //Helpers
     public static String getWhitelistText() {
-        return isClientWhitelisted
+        return ConfigManagerClient.isClientWhitelisted
                 ? "Whitelist Client: On"
                 : "Whitelist Client: Off";
     }

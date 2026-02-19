@@ -11,10 +11,11 @@ import org.slf4j.LoggerFactory;
 /*
 
 What to Add:
-*
+- Maybe a NoAggro?
+- Make the online button's state save but only if it is on.
 
 What to Fix:
-*
+- Nutin
 
  */
 public class Simply_optimized implements ModInitializer {

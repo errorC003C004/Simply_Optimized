@@ -23,11 +23,11 @@ public class HudRenderClient {
     }
 
     private static void render(DrawContext ctx, RenderTickCounter tickCounter) {
-        if (!UIFunctions.isClientWhitelisted)
+        if (!ConfigManagerClient.isClientWhitelisted)
         {
             return;
         }
-        if (!UIFunctions.showImage) return;
+        if (!ConfigManagerClient.showImage) return;
 
         int x = 5;
         int y = 5;

@@ -19,8 +19,12 @@ public class MyScreen extends Screen {
         int centerX = this.width / 2;
         int centerY = this.height / 2;
         ButtonWidget showHideImageButton = ButtonWidget.builder(
-                Text.literal("Show/Hide Image"),
-                b -> UIFunctions.showImage = !UIFunctions.showImage
+                Text.literal(getImageText()),
+                b ->
+                {
+                    if (this.client == null || this.client.player == null) return;
+                    UIFunctions.immagebutton();
+                }
         ).dimensions(centerX - 50, centerY - 24, 100, 20).build();
 
         immortalityButton = ButtonWidget.builder(
@@ -69,10 +73,17 @@ public class MyScreen extends Screen {
         return "Immortality: " + UIFunctions.isImmortal;
     }
 
-    // 🔥 THIS is what updates the UI properly
     public void refreshImmortalityText() {
         if (immortalityButton != null) {
             immortalityButton.setMessage(Text.literal(getImmortalityText()));
+        }
+    }
+
+    public String getImageText() {
+        if (ConfigManagerClient.showImage) {
+            return "Show Visualizer";
+        } else {
+            return "Hide Visualizer";
         }
     }
 }

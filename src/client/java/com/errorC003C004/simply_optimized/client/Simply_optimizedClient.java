@@ -11,13 +11,13 @@ public class Simply_optimizedClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-
+        ConfigManagerClient.loadConfig();
         CommandInitClient.register();
         HudRenderClient.init();
 
         // Existing handshake ping
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            if (UIFunctions.isClientWhitelisted) {
+            if (ConfigManagerClient.isClientWhitelisted) {
                 ClientPlayNetworking.send(new PingPayload());
             }
         });

@@ -132,10 +132,10 @@ public final class HandshakeServer {
                 new ImmortalityStatusPayload(immortal)
         );
 
-        player.sendMessage(
-                Text.literal("Immortality is " + immortal + "!"),
-                false
-        );
+        //player.sendMessage(
+        //        Text.literal("Immortality is " + immortal + "!"),
+       //         false
+       // );
     }
 
 
