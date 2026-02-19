@@ -257,7 +257,7 @@ public class CommandInit {
                                                 LookExplosionUtil.railgunTunnel(
                                                         player,
                                                         range,
-                                                        4.0F // default size/power
+                                                        4.0F
                                                 );
 
                                                 return 1;

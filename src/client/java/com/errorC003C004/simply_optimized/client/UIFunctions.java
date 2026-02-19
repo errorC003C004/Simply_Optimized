@@ -21,7 +21,7 @@ public class UIFunctions {
     }
 
     //Buttons
-    public static void immagebutton() {
+    public static void immagebutton(MinecraftClient client) {
         LOGGER.info("Button pressed, Image");
         //Do same as ConfigManagerClient.showImage = !ConfigManagerClient.showImage
         if (ConfigManagerClient.showImage) {
@@ -29,7 +29,9 @@ public class UIFunctions {
         } else {
             ConfigManagerClient.showImageTrue();
         }
-
+        if (client.currentScreen instanceof MyScreen screen) {
+            screen.refreshgetImageText();
+        }
     }
 
     public static void immortalitybutton(MinecraftClient client) {

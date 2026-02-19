@@ -8,6 +8,7 @@ import net.minecraft.text.Text;
 public class MyScreen extends Screen {
 
     public ButtonWidget immortalityButton;
+    public ButtonWidget showHideImageButton;
 
     public MyScreen() {
         super(Text.literal("My UI"));
@@ -18,12 +19,12 @@ public class MyScreen extends Screen {
 
         int centerX = this.width / 2;
         int centerY = this.height / 2;
-        ButtonWidget showHideImageButton = ButtonWidget.builder(
+       showHideImageButton = ButtonWidget.builder(
                 Text.literal(getImageText()),
                 b ->
                 {
                     if (this.client == null || this.client.player == null) return;
-                    UIFunctions.immagebutton();
+                    UIFunctions.immagebutton(this.client);
                 }
         ).dimensions(centerX - 50, centerY - 24, 100, 20).build();
 
@@ -80,10 +81,16 @@ public class MyScreen extends Screen {
     }
 
     public String getImageText() {
-        if (ConfigManagerClient.showImage) {
+        if (!ConfigManagerClient.isShowImage()) {
             return "Show Visualizer";
         } else {
             return "Hide Visualizer";
+        }
+    }
+
+    public void refreshgetImageText() {
+        if (showHideImageButton != null) {
+            showHideImageButton.setMessage(Text.literal(getImageText()));
         }
     }
 }

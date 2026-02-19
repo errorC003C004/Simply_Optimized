@@ -37,6 +37,11 @@ public class ConfigManagerClient {
         saveConfig();
     }
 
+    public static boolean isShowImage() {
+        if (showImage) return true;
+        else return false;
+    }
+
     public static void showImageFalse() {
         showImage = false;
         saveConfig();
