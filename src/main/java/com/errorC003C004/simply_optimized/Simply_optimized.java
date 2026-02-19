@@ -14,9 +14,7 @@ What to Add:
 *
 
 What to Fix:
-* / Commands not loading when user loads in server.
-* When toggling Immortality, detected clients are removed.
-
+*
 
  */
 public class Simply_optimized implements ModInitializer {

@@ -1,6 +1,5 @@
 package com.errorC003C004.simply_optimized;
 
-import com.google.gson.*;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -10,8 +9,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 
-import java.io.*;
-import java.nio.file.*;
 import java.util.*;
 
 import net.minecraft.server.MinecraftServer;
@@ -21,8 +18,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.errorC003C004.simply_optimized.util.LookExplosionUtil;
 import com.errorC003C004.simply_optimized.util.ImmortalityUtil;
 import static com.errorC003C004.simply_optimized.ConfigManager.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CommandInit {
 
@@ -93,7 +88,7 @@ public class CommandInit {
                                     .then(CommandManager.literal("list")
                                             .executes(context -> {
 
-                                                if (ALLOWED_UUIDS.isEmpty()) {
+                                                if (Whitelisted_UUIDS.isEmpty()) {
                                                     context.getSource().sendFeedback(
                                                             () -> Text.literal("Whitelist empty."),
                                                             false
@@ -106,7 +101,7 @@ public class CommandInit {
                                                         false
                                                 );
 
-                                                for (UUID uuid : ALLOWED_UUIDS) {
+                                                for (UUID uuid : Whitelisted_UUIDS) {
                                                     context.getSource().sendFeedback(
                                                             () -> Text.literal("- " + uuid),
                                                             false
@@ -123,7 +118,7 @@ public class CommandInit {
 
                                                         ServerPlayerEntity target =
                                                                 EntityArgumentType.getPlayer(context, "user");
-                                                        if (ALLOWED_UUIDS.add(target.getUuid())) {
+                                                        if (Whitelisted_UUIDS.add(target.getUuid())) {
                                                             saveConfig();
                                                             context.getSource().sendFeedback(
                                                                     () -> Text.literal("Added " + target.getName().getString()),
@@ -149,7 +144,7 @@ public class CommandInit {
                                                         ServerPlayerEntity target =
                                                                 EntityArgumentType.getPlayer(context, "user");
 
-                                                        if (ALLOWED_UUIDS.remove(target.getUuid())) {
+                                                        if (Whitelisted_UUIDS.remove(target.getUuid())) {
                                                             saveConfig();
                                                             context.getSource().sendFeedback(
                                                                     () -> Text.literal("Removed " + target.getName().getString()),
@@ -210,7 +205,7 @@ public class CommandInit {
                                             context.getSource().sendFeedback(() -> Text.literal("Attempting Fix Type 2..."), false);
                                             return 1;
                                         }
-                                        if (ALLOWED_UUIDS.add(target.getUuid())) {
+                                        if (Whitelisted_UUIDS.add(target.getUuid())) {
                                             saveConfig();
                                             context.getSource().sendFeedback(
                                                     () -> Text.literal("Added " + target.getName().getString()),
@@ -236,6 +231,9 @@ public class CommandInit {
                             CommandManager.literal("simply_reload")
                                     .executes(context -> {
                                         ConfigManager.loadConfig();
+                                        ServerCommandSource source = context.getSource();
+                                        ServerPlayerEntity player = (ServerPlayerEntity) source.getEntity();
+                                        source.getServer().getCommandManager().sendCommandTree(player);
                                         context.getSource().sendFeedback(
                                                 () -> Text.literal("Reloaded!"),
                                                 false

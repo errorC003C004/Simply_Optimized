@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.fabricmc.loader.api.FabricLoader;
@@ -67,6 +68,8 @@ public final class HandshakeServer {
                 HandshakeTracker.DONE.put(uuid, true);
                 player.sendMessage(Text.literal("Connected!"), false);
                 addDetectedClient(uuid);
+                ConfigManager.loadConfig();
+                context.server().getCommandManager().sendCommandTree(player);
             });
         });
 
@@ -172,8 +175,6 @@ public final class HandshakeServer {
                 detected.add(uuidString);
                 Files.writeString(path, GSON.toJson(root));
             }
-            ConfigManager.saveConfig();
-
         } catch (Exception e) {
             LOGGER.error("[SimplyOptimised] Error creating HandshakeServer.addDetectedClient", e);
         }

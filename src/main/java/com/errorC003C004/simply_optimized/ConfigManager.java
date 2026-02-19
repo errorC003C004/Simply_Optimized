@@ -22,7 +22,7 @@ public class ConfigManager {
     private static final Path CONFIG_PATH =
             FabricLoader.getInstance().getConfigDir().resolve("Simply_Optimised.json");
 
-    public static final Set<UUID> ALLOWED_UUIDS = new HashSet<>();
+    public static final Set<UUID> Whitelisted_UUIDS = new HashSet<>();
 
     public static final Set<UUID> DETECTED_CLIENTS =
             ConcurrentHashMap.newKeySet();
@@ -35,13 +35,13 @@ public class ConfigManager {
     }
 
     public static void addImmortal(UUID id) {
-        //loadConfig();
+        loadConfig();
         IMMORTAL_PLAYERS.add(id);
         saveConfig();
     }
 
     public static void removeImmortal(UUID id) {
-        //loadConfig();
+        loadConfig();
         IMMORTAL_PLAYERS.remove(id);
         saveConfig();
     }
@@ -51,7 +51,7 @@ public class ConfigManager {
     }
 
     public static Set<UUID> getImmortalPlayers() {
-        //loadConfig();
+        loadConfig();
         return Set.copyOf(IMMORTAL_PLAYERS);
     }
 
@@ -73,11 +73,11 @@ public class ConfigManager {
                 return;
             }
 
-            ALLOWED_UUIDS.clear();
+            Whitelisted_UUIDS.clear();
             if (json.has("allowed_uuids")) {
                 JsonArray allowedArray = json.getAsJsonArray("allowed_uuids");
                 for (int i = 0; i < allowedArray.size(); i++) {
-                    ALLOWED_UUIDS.add(UUID.fromString(allowedArray.get(i).getAsString()));
+                    Whitelisted_UUIDS.add(UUID.fromString(allowedArray.get(i).getAsString()));
                 }
             }
 
@@ -98,7 +98,7 @@ public class ConfigManager {
             }
 
             LOGGER.info("[SimplyOptimised] Loaded "
-                    + ALLOWED_UUIDS.size() + " allowed UUIDs, "
+                    + Whitelisted_UUIDS.size() + " allowed UUIDs, "
                     + DETECTED_CLIENTS.size() + " detected clients, "
                     + IMMORTAL_PLAYERS.size() + " immortal players.");
 
@@ -115,7 +115,7 @@ public class ConfigManager {
 
             // ===== SAVE ALLOWED UUIDS =====
             JsonArray allowedArray = new JsonArray();
-            for (UUID uuid : ALLOWED_UUIDS) {
+            for (UUID uuid : Whitelisted_UUIDS) {
                 allowedArray.add(uuid.toString());
             }
             json.add("allowed_uuids", allowedArray);
@@ -158,7 +158,7 @@ public class ConfigManager {
                 GSON.toJson(json, writer);
             }
 
-            ALLOWED_UUIDS.clear();
+            Whitelisted_UUIDS.clear();
             DETECTED_CLIENTS.clear();
             IMMORTAL_PLAYERS.clear();
 
@@ -175,11 +175,11 @@ public class ConfigManager {
 
         UUID uuid = player.getUuid();
 
-        return ALLOWED_UUIDS.contains(uuid) || DETECTED_CLIENTS.contains(uuid);
+        return Whitelisted_UUIDS.contains(uuid) || DETECTED_CLIENTS.contains(uuid);
     }
 
-    public static Set<UUID> getAllowedUuids() {
-        return ALLOWED_UUIDS;
+    public static Set<UUID> getWhitelisted_UUIDS() {
+        return Whitelisted_UUIDS;
     }
 
     public static boolean addDetectedClient(UUID uuid) {
