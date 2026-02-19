@@ -5,7 +5,7 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
 -- e_ui (shows ui)
 
--- e_immortality_toggle (toggles image of teto)
+-- e_immortality_toggle (toggles immortality)
 # Server Commands
 NEEDS WHITELIST
 
