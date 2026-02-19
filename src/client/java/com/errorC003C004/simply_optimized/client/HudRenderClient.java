@@ -40,7 +40,7 @@ public class HudRenderClient {
                 x, y,
                 0f, 0f,
                 64, 64,
-                64, 64
+                512, 512
         );
     }
 }

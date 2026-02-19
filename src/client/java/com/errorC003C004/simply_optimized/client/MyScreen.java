@@ -26,7 +26,7 @@ public class MyScreen extends Screen {
         );
         this.addDrawableChild(
                 ButtonWidget.builder(
-                        Text.literal("Immortality:"),
+                        Text.literal("Immortality:" + UIFunctions.isImmortal),
                         button -> {
                             if (this.client == null || this.client.player == null) return;
                             UIFunctions.immortalitybutton(this.client);

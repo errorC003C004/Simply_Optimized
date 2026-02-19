@@ -10,16 +10,12 @@ import org.slf4j.LoggerFactory;
 
 /*
 
-
 What to Add:
-* Handshake to Detect Whitelist Option in Settings.
--- Makes all "error_" Commands only show if its enabled
--- If Owners install it then they dont see it
+*
 
 What to Fix:
-
-
-Make isAuthorized check the button
+* / Commands not loading when user loads in server.
+* When toggling Immortality, detected clients are removed.
 
 
  */
