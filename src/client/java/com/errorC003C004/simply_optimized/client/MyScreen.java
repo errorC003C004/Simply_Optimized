@@ -7,6 +7,8 @@ import net.minecraft.text.Text;
 
 public class MyScreen extends Screen {
 
+    public ButtonWidget immortalityButton;
+
     public MyScreen() {
         super(Text.literal("My UI"));
     }
@@ -16,42 +18,39 @@ public class MyScreen extends Screen {
 
         int centerX = this.width / 2;
         int centerY = this.height / 2;
-        this.addDrawableChild(
-                ButtonWidget.builder(
-                                Text.literal("Show/Hide Image"),
-                                b -> UIFunctions.showImage = !UIFunctions.showImage
-                        )
-                        .dimensions(centerX - 50, centerY - 24, 100, 20)
-                        .build()
-        );
-        this.addDrawableChild(
-                ButtonWidget.builder(
-                        Text.literal("Immortality:" + UIFunctions.isImmortal),
-                        button -> {
-                            if (this.client == null || this.client.player == null) return;
-                            UIFunctions.immortalitybutton(this.client);
-                        }
-                ).dimensions(centerX - 50, centerY, 100, 20).build()
-        );
+        ButtonWidget showHideImageButton = ButtonWidget.builder(
+                Text.literal("Show/Hide Image"),
+                b -> UIFunctions.showImage = !UIFunctions.showImage
+        ).dimensions(centerX - 50, centerY - 24, 100, 20).build();
 
-        this.addDrawableChild(
-                ButtonWidget.builder(
-                        Text.literal("Close"),
-                        b -> this.client.setScreen(null)
-                ).dimensions(centerX - 50, centerY + 24, 100, 20).build()
-        );
+        immortalityButton = ButtonWidget.builder(
+                Text.literal(getImmortalityText()),
+                b -> {
+                    if (this.client == null || this.client.player == null) return;
+                    UIFunctions.immortalitybutton(this.client);
+                    immortalityButton.active = false;
+                }
+        ).dimensions(centerX - 50, centerY, 100, 20).build();
+
+        ButtonWidget closeButton = ButtonWidget.builder(
+                Text.literal("Close"),
+                b -> this.client.setScreen(null)
+        ).dimensions(centerX - 50, centerY + 24, 100, 20).build();
+
+
+
+        this.addDrawableChild(showHideImageButton);
+        this.addDrawableChild(immortalityButton);
+        this.addDrawableChild(closeButton);
     }
 
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
 
-        // background
         ctx.fill(0, 0, this.width, this.height, 0x88000000);
 
-        // buttons + widgets
         super.render(ctx, mouseX, mouseY, delta);
 
-        // title text
         ctx.drawCenteredTextWithShadow(
                 this.textRenderer,
                 "SCREEN OPENED",
@@ -64,5 +63,16 @@ public class MyScreen extends Screen {
     @Override
     public boolean shouldPause() {
         return false;
+    }
+
+    private String getImmortalityText() {
+        return "Immortality: " + UIFunctions.isImmortal;
+    }
+
+    // 🔥 THIS is what updates the UI properly
+    public void refreshImmortalityText() {
+        if (immortalityButton != null) {
+            immortalityButton.setMessage(Text.literal(getImmortalityText()));
+        }
     }
 }

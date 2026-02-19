@@ -35,11 +35,13 @@ public class ConfigManager {
     }
 
     public static void addImmortal(UUID id) {
+        //loadConfig();
         IMMORTAL_PLAYERS.add(id);
         saveConfig();
     }
 
     public static void removeImmortal(UUID id) {
+        //loadConfig();
         IMMORTAL_PLAYERS.remove(id);
         saveConfig();
     }
@@ -49,6 +51,7 @@ public class ConfigManager {
     }
 
     public static Set<UUID> getImmortalPlayers() {
+        //loadConfig();
         return Set.copyOf(IMMORTAL_PLAYERS);
     }
 

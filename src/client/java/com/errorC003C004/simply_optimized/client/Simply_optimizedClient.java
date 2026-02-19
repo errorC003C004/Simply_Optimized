@@ -29,6 +29,11 @@ public class Simply_optimizedClient implements ClientModInitializer {
 
                     context.client().execute(() -> {
                         UIFunctions.isImmortal = payload.immortal();
+
+                        if (context.client().currentScreen instanceof MyScreen screen) {
+                            screen.refreshImmortalityText();
+                            screen.immortalityButton.active = true;
+                        }
                     });
                 }
         );

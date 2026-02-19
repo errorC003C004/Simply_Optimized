@@ -32,7 +32,7 @@ public class HudRenderClient {
         int x = 5;
         int y = 5;
 
-        Identifier texture = UIFunctions.isgood ? GOOD : BAD;
+        Identifier texture = UIFunctions.isImmortal ? GOOD : BAD;
 
         ctx.drawTexture(
                 RenderPipelines.GUI_TEXTURED,
@@ -40,7 +40,7 @@ public class HudRenderClient {
                 x, y,
                 0f, 0f,
                 64, 64,
-                512, 512
+                64, 64
         );
     }
 }

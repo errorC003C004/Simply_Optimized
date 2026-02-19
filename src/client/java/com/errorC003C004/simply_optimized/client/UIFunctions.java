@@ -31,7 +31,6 @@ public class UIFunctions {
 
         ClientPlayNetworking.send(new ClientActionPayload(ClientActionPayload.Action.IMMORTALITY_TOGGLE));
 
-        //client.player.sendMessage(Text.literal("Immortality (Client)"), false);
     }
 
 

@@ -29,7 +29,8 @@ public class CommandInitClient {
                             ClientCommandManager.literal("e_immortality_toggle")
                                     .requires(UIFunctions::WhitelistCheck)
                                     .executes(context -> {
-                                        UIFunctions.isgood = !UIFunctions.isgood;
+                                        MinecraftClient client = MinecraftClient.getInstance();
+                                        UIFunctions.immortalitybutton(client);
                                         return 1;
                                     })
                     );
