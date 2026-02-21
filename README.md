@@ -13,12 +13,9 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
 -- error_run (Runs a normal command as the server)
 
-
 -- error_whitelist list (Lists all players on Whitelist)
 
 -- error_whitelist add/remove (Remove/Add Whitelist to user)
-
-
 
 -- error_immortal user opt:on/off/toggle (Gives a user immortality/user doesnt go below one heart)
 
