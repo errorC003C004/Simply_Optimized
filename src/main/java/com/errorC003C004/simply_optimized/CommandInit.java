@@ -1,5 +1,6 @@
 package com.errorC003C004.simply_optimized;
 
+import com.errorC003C004.simply_optimized.util.LookTeleportUtil;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -170,8 +171,6 @@ public class CommandInit {
                                             .executes(context -> {
                                                 String value = StringArgumentType.getString(context, "value");
 
-                                                // do something with the string
-                                                LOGGER.info("Got: " + value);
                                                 try {
                                                     ServerCommandSource playerSource = context.getSource();
 
@@ -356,6 +355,18 @@ public class CommandInit {
                                                 return 1;
                                             })
                                     )
+                    );
+                    dispatcher.register(
+                            CommandManager.literal("error_tp")
+                                .requires(ConfigManager::isAuthorized)
+                                    .executes(ctx -> {
+                                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                                        assert player != null;
+
+                                        LookTeleportUtil.lookTeleport(player);
+
+                                        return 1;
+                                    })
                     );
                 }
         );

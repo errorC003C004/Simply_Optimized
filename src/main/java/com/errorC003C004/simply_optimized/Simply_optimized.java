@@ -15,7 +15,7 @@ What to Add:
 - Ignore Armor.
 
 What to Fix:
-- Nutin
+-
 
  */
 public class Simply_optimized implements ModInitializer {

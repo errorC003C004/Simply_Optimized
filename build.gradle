@@ -109,3 +109,10 @@ publishing {
         // retrieving dependencies.
     }
 }
+
+tasks.register("!serverclientinstall", Exec) {
+    group = "build"
+    description = "Runs Fix Script"
+    dependsOn tasks.build
+    commandLine "python", "D:\\Juare\\AppData\\Roaming\\ATLauncher\\servers\\mtt\\!serverclientinstall.py"
+}
