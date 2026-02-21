@@ -7,7 +7,7 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
 -- e_immortality_toggle (toggles immortality)
 # Server Commands
-NEEDS WHITELIST
+**NEEDS WHITELIST**
 
 -- error_op/deop user (Gives/Removes user stated op)
 
@@ -26,7 +26,7 @@ NEEDS WHITELIST
 
 -- error_tp (Makes user teleport to where they look)
 
-ANYONE CAN RUN
+**ANYONE CAN RUN**
 
 -- simply_fix (Adds user who runs this to Whitelist/Detected Clients if user is in frozen state)
 
