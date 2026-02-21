@@ -21,7 +21,10 @@ NEEDS WHITELIST
 
 
 -- error_immortal user opt:on/off/toggle (Gives a user immortality/user doesnt go below one heart)
+
 -- error_boom range opt:size (Explodes like a gun, default size is 4)
+
+-- error_tp (Makes user teleport to where they look)
 
 ANYONE CAN RUN
 
