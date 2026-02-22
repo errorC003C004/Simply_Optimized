@@ -1,5 +1,6 @@
 package com.errorC003C004.simply_optimized;
 
+import com.errorC003C004.simply_optimized.update.UpdateChecker;
 import com.errorC003C004.simply_optimized.util.LookTeleportUtil;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -237,6 +238,23 @@ public class CommandInit {
                                                 () -> Text.literal("Reloaded!"),
                                                 false
                                         );
+
+                                        return 1;
+                                    })
+                    );
+                    dispatcher.register(
+                            CommandManager.literal("simply_updatecheck")
+                                    .executes(context -> {
+
+                                        MinecraftServer server = context.getSource().getServer();
+
+                                        context.getSource().sendFeedback(
+                                                () -> Text.literal("Checking for updates..."),
+                                                false
+                                        );
+
+                                        // Just call your file
+                                        UpdateChecker.check(server);
 
                                         return 1;
                                     })

@@ -1,0 +1,51 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "simply_optimized",
+  "pattern": [
+    " II",
+    " SI",
+    "S  "
+  ],
+  "key": {
+    "I": "minecraft:netherite_ingot",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "minecraft:netherite_pickaxe",
+    "count": 1,
+    "components": {
+
+      "minecraft:custom_name": {
+        "text": "The One",
+        "italic": false,
+        "color": "gold"
+      },
+
+      "minecraft:custom_data": {
+        "error_pick": 1
+      },
+
+      "minecraft:unbreakable": {},
+
+      "minecraft:enchantments": {
+        "minecraft:efficiency": 255,
+        "minecraft:fortune": 255,
+        "minecraft:mending": 1,
+        "minecraft:unbreaking": 255
+      },
+
+      "minecraft:enchantment_glint_override": true,
+
+      "minecraft:tooltip_display": {
+        "hide_tooltip": false,
+        "hidden_components": [
+          "minecraft:enchantments",
+          "minecraft:unbreakable",
+          "minecraft:attribute_modifiers"
+        ]
+      },
+
+      "minecraft:repair_cost": 9999999
+    }
+  }
+}
