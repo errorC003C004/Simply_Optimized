@@ -9,7 +9,7 @@
     "homepage": "https://guns.lol/errorC003C004"
   },
   "license": "All-Rights-Reserved",
-  "icon": "assets/simply-optimized/icon.png",
+  "icon": "assets/simply_optimized/icon.png",
   "environment": "*",
   "entrypoints": {
     "fabric-datagen": [

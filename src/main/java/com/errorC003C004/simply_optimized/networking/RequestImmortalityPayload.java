@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 public record RequestImmortalityPayload() implements CustomPayload {
 
     public static final Id<RequestImmortalityPayload> ID =
-            new Id<>(Identifier.of("simply-optimized", "request_immortality"));
+            new Id<>(Identifier.of("simply_optimized", "request_immortality"));
 
     public static final PacketCodec<RegistryByteBuf, RequestImmortalityPayload> CODEC =
             PacketCodec.unit(new RequestImmortalityPayload());

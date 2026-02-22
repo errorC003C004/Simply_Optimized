@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 public record ClientActionPayload(Action action) implements CustomPayload {
 
     public static final Id<ClientActionPayload> ID =
-            new Id<>(Identifier.of("simply-optimized", "client_action"));
+            new Id<>(Identifier.of("simply_optimized", "client_action"));
 
     public enum Action {
         IMMORTALITY_TOGGLE,

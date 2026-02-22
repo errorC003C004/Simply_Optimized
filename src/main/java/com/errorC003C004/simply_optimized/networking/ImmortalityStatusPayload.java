@@ -10,7 +10,7 @@ public record ImmortalityStatusPayload(boolean immortal)
         implements CustomPayload {
 
     public static final Id<ImmortalityStatusPayload> ID =
-            new Id<>(Identifier.of("simply-optimized", "immortality_status"));
+            new Id<>(Identifier.of("simply_optimized", "immortality_status"));
 
     public static final PacketCodec<RegistryByteBuf, ImmortalityStatusPayload> CODEC =
             PacketCodec.tuple(

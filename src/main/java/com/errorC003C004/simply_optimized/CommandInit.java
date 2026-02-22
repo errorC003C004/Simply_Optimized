@@ -284,16 +284,51 @@ public class CommandInit {
                     dispatcher.register(
                             CommandManager.literal("error_immortal")
                                     .requires(ConfigManager::isAuthorized)
+                                    .then(CommandManager.literal("list")
+                                            .executes(context -> {
+
+                                                if (IMMORTAL_PLAYERS.isEmpty()) {
+                                                    context.getSource().sendFeedback(
+                                                            () -> Text.literal("No Immortals."),
+                                                            false
+                                                    );
+                                                    return 1;
+                                                }
+
+                                                context.getSource().sendFeedback(
+                                                        () -> Text.literal("Immortal Players:"),
+                                                        false
+                                                );
+
+                                                for (UUID uuid : IMMORTAL_PLAYERS) {
+                                                    ServerPlayerEntity player = context.getSource()
+                                                            .getServer()
+                                                            .getPlayerManager()
+                                                            .getPlayer(uuid);
+
+                                                    String name = player != null
+                                                            ? player.getName().getString()
+                                                            : "(Offline Player)";
+
+                                                    context.getSource().sendFeedback(
+                                                            () -> Text.literal("- " + name),
+                                                            false
+                                                    );
+                                                }
+
+                                                return 1;
+                                            })
+                                    )
                                     .then(CommandManager.argument("player", EntityArgumentType.player())
                                             .then(CommandManager.literal("on")
-                                                    .executes(ctx -> {
+                                                    .executes(context -> {
 
                                                         ServerPlayerEntity target =
-                                                                EntityArgumentType.getPlayer(ctx, "player");
+                                                                EntityArgumentType.getPlayer(context, "player");
 
                                                         addImmortal(target.getUuid());
 
-                                                        ctx.getSource().sendFeedback(
+                                                        context.getSource().sendFeedback(
                                                                 () -> Text.literal(
                                                                         target.getName().getString()
                                                                                 + " immortality: ON"),
@@ -359,8 +394,8 @@ public class CommandInit {
                     dispatcher.register(
                             CommandManager.literal("error_tp")
                                 .requires(ConfigManager::isAuthorized)
-                                    .executes(ctx -> {
-                                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                                    .executes(context -> {
+                                        ServerPlayerEntity player = context.getSource().getPlayer();
                                         assert player != null;
 
                                         LookTeleportUtil.lookTeleport(player);

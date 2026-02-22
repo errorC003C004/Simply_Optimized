@@ -177,22 +177,4 @@ public class ConfigManager {
 
         return Whitelisted_UUIDS.contains(uuid) || DETECTED_CLIENTS.contains(uuid);
     }
-
-    public static Set<UUID> getWhitelisted_UUIDS() {
-        return Whitelisted_UUIDS;
-    }
-
-    public static boolean addDetectedClient(UUID uuid) {
-        boolean added = DETECTED_CLIENTS.add(uuid);
-        if (added) saveConfig();
-        return added;
-    }
-
-    public static boolean isDetectedClient(UUID uuid) {
-        return DETECTED_CLIENTS.contains(uuid);
-    }
-
-    public static Set<UUID> getDetectedClients() {
-        return Collections.unmodifiableSet(DETECTED_CLIENTS);
-    }
 }

@@ -10,9 +10,9 @@ import net.minecraft.client.render.RenderTickCounter;
 public class HudRenderClient {
 
     private static final Identifier BAD =
-            Identifier.of("simply-optimized", "textures/gui/test_bad.png");
+            Identifier.of("simply_optimized", "textures/gui/test_bad.png");
     private static final Identifier GOOD =
-            Identifier.of("simply-optimized", "textures/gui/test_good.png");
+            Identifier.of("simply_optimized", "textures/gui/test_good.png");
 
     public static void init() {
         HudElementRegistry.attachElementBefore(
