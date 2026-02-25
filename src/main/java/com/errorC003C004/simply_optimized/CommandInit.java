@@ -253,7 +253,6 @@ public class CommandInit {
                                                 false
                                         );
 
-                                        // Just call your file
                                         UpdateChecker.check(server);
 
                                         return 1;

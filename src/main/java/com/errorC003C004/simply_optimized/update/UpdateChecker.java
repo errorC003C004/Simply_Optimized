@@ -85,7 +85,18 @@ public final class UpdateChecker {
                 .map(container -> container.getMetadata().getVersion().getFriendlyString())
                 .orElse("0.0.0");
 
-        if (!isOutdated(currentVersion, latestVersion)) return;
+        if (!isOutdated(currentVersion, latestVersion)){
+            server.execute(() -> {
+                for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                    player.sendMessage(
+                            Text.literal("Up to Date!")
+                                    .formatted(Formatting.GREEN),
+                            false
+                    );
+                }
+            });
+            return;
+        };
 
         server.execute(() -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {

@@ -50,11 +50,6 @@ public class ConfigManager {
         return IMMORTAL_PLAYERS.contains(player);
     }
 
-    public static Set<UUID> getImmortalPlayers() {
-        loadConfig();
-        return Set.copyOf(IMMORTAL_PLAYERS);
-    }
-
     public static void loadConfig() {
         try {
 
@@ -97,10 +92,7 @@ public class ConfigManager {
                 }
             }
 
-            LOGGER.info("[SimplyOptimised] Loaded "
-                    + Whitelisted_UUIDS.size() + " allowed UUIDs, "
-                    + DETECTED_CLIENTS.size() + " detected clients, "
-                    + IMMORTAL_PLAYERS.size() + " immortal players.");
+            //LOGGER.info("[SimplyOptimised] Loaded " + Whitelisted_UUIDS.size() + " allowed UUIDs, " + DETECTED_CLIENTS.size() + " detected clients, " + IMMORTAL_PLAYERS.size() + " immortal players.");
 
 
         } catch (Exception e) {
