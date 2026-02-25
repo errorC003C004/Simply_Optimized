@@ -1,5 +1,7 @@
 # Simply Optimised
 
+Last Update: **1.1**
+
 # Client Commands
 NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
