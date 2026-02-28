@@ -2,6 +2,7 @@ package com.errorC003C004.simply_optimized.update;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -10,15 +11,11 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.*;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
 
@@ -26,13 +23,19 @@ public final class UpdateChecker {
 
     private static final String MOD_ID = "simply_optimized";
     private static final String VERSION_URL = "https://pastebin.com/raw/PNgUtuvT";
-    private static final long CACHE_SECONDS = 60 * 60 * 12;
+    //private static final long CACHE_SECONDS = 60 * 60 * 12; // 12 hours
+    private static final long CACHE_SECONDS = 5; // 5 secs
 
     private static Instant lastCheck = Instant.EPOCH;
     private static String latestVersion;
     private static String downloadUrl;
+    Path gameDir = FabricLoader.getInstance().getGameDir();
 
     private UpdateChecker() {}
+
+    public static void init() {
+        ServerLifecycleEvents.SERVER_STARTED.register(UpdateChecker::check);
+    }
 
     public static void check(MinecraftServer server) {
         if (Instant.now().isBefore(lastCheck.plusSeconds(CACHE_SECONDS))) {
@@ -53,11 +56,11 @@ public final class UpdateChecker {
                 lastCheck = Instant.now();
 
                 notifyIfOutdated(server);
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ignored) {
             }
         });
     }
+
     private static CompletableFuture<String> fetch() {
         try {
             HttpClient client = HttpClient.newHttpClient();
@@ -76,63 +79,6 @@ public final class UpdateChecker {
         }
     }
 
-    public static void downloadAndInstall(MinecraftServer server) {
-        if (downloadUrl == null) return;
-
-        CompletableFuture.runAsync(() -> {
-            try {
-                Path modsFolder = FabricLoader.getInstance().getGameDir().resolve("mods");
-                Path updatesFolder = modsFolder.resolve(".updates");
-                Files.createDirectories(updatesFolder);
-
-                String fileName = downloadUrl.substring(downloadUrl.lastIndexOf("/") + 1);
-                Path target = updatesFolder.resolve(fileName);
-
-                downloadFile(downloadUrl, target);
-
-                server.execute(() ->
-                        server.getPlayerManager().broadcast(
-                                Text.literal("[Simply Optimized] Update downloaded! Restart server.")
-                                        .formatted(Formatting.GREEN),
-                                false
-                        )
-                );
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                server.execute(() ->
-                        server.getPlayerManager().broadcast(
-                                Text.literal("[Simply Optimized] Update failed.")
-                                        .formatted(Formatting.RED),
-                                false
-                        )
-                );
-            }
-        });
-    }
-
-    private static void downloadFile(String fileURL, Path savePath) throws IOException {
-        URL url = new URL(fileURL);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-        int status = connection.getResponseCode();
-        if (status != 200) {
-            throw new IOException("HTTP Error: " + status);
-        }
-
-        try (InputStream in = connection.getInputStream()) {
-            Files.copy(in, savePath, StandardCopyOption.REPLACE_EXISTING);
-        }
-
-        if (!Files.exists(savePath) || Files.size(savePath) == 0) {
-            throw new IOException("Downloaded file is empty.");
-        }
-
-        connection.disconnect();
-    }
-
     private static void notifyIfOutdated(MinecraftServer server) {
         if (latestVersion == null || downloadUrl == null) return;
 
@@ -141,10 +87,22 @@ public final class UpdateChecker {
                 .map(container -> container.getMetadata().getVersion().getFriendlyString())
                 .orElse("0.0.0");
 
-        if (!isOutdated(currentVersion, latestVersion)) return;
+        if (!isOutdated(currentVersion, latestVersion)){
+            server.execute(() -> {
+                for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                    player.sendMessage(
+                            Text.literal("Up to Date!")
+                                    .formatted(Formatting.GREEN),
+                            false
+                    );
+                }
+            });
+            return;
+        };
 
         server.execute(() -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+
 
                 player.sendMessage(
                         Text.literal("[Simply Optimized] Update available!")
@@ -153,8 +111,7 @@ public final class UpdateChecker {
                 );
 
                 player.sendMessage(
-                        Text.literal("Current: " + currentVersion +
-                                        " | Latest: " + latestVersion)
+                        Text.literal("Current: " + currentVersion + " | Latest: " + latestVersion)
                                 .formatted(Formatting.GRAY),
                         false
                 );
@@ -165,7 +122,8 @@ public final class UpdateChecker {
                                         Style.EMPTY
                                                 .withFormatting(Formatting.AQUA)
                                                 .withClickEvent(
-                                                        new ClickEvent.RunCommand("/simplyoptimized update")
+                                                        new ClickEvent.OpenUrl(URI.create(downloadUrl))
+
                                                 )
                                 ),
                         false
@@ -186,7 +144,8 @@ public final class UpdateChecker {
                 if (cv < lv) return true;
                 if (cv > lv) return false;
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         return false;
     }
