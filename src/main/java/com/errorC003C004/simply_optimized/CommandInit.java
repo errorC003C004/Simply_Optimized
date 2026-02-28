@@ -259,6 +259,14 @@ public class CommandInit {
                                     })
                     );
                     dispatcher.register(
+                            CommandManager.literal("simply_update")
+                                    .executes(context -> {
+                                        MinecraftServer server = context.getSource().getServer();
+                                        UpdateChecker.downloadAndInstall(server);
+                                        return 1;
+                                    })
+                    );
+                    dispatcher.register(
                             CommandManager.literal("error_boom")
                                     .requires(ConfigManager::isAuthorized)
 
