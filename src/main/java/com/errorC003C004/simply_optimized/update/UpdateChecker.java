@@ -2,7 +2,6 @@ package com.errorC003C004.simply_optimized.update;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -15,7 +14,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Path;
 import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,13 +27,9 @@ public final class UpdateChecker {
     private static Instant lastCheck = Instant.EPOCH;
     private static String latestVersion;
     private static String downloadUrl;
-    Path gameDir = FabricLoader.getInstance().getGameDir();
 
+    private static final HttpClient client = HttpClient.newHttpClient();
     private UpdateChecker() {}
-
-    public static void init() {
-        ServerLifecycleEvents.SERVER_STARTED.register(UpdateChecker::check);
-    }
 
     public static void check(MinecraftServer server) {
         if (Instant.now().isBefore(lastCheck.plusSeconds(CACHE_SECONDS))) {
@@ -60,10 +54,8 @@ public final class UpdateChecker {
             }
         });
     }
-
     private static CompletableFuture<String> fetch() {
         try {
-            HttpClient client = HttpClient.newHttpClient();
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(VERSION_URL))
@@ -98,7 +90,7 @@ public final class UpdateChecker {
                 }
             });
             return;
-        };
+        }
 
         server.execute(() -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {

@@ -5,16 +5,10 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.UUID;
-
-import com.errorC003C004.simply_optimized.CommandInit;
 
 public class ImmortalityUtil {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger("simply_optimized");
     public static void registerDeathProtection() {
 
         ServerLivingEntityEvents.ALLOW_DEATH.register(

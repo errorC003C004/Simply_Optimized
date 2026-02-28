@@ -16,7 +16,6 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
 
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -28,24 +27,18 @@ public class ErrorPick {
 
     public static ItemStack createErrorPick(CommandRegistryAccess registryAccess) {
 
-        RegistryWrapper.WrapperLookup lookup = registryAccess;
-
         ItemStack stack = new ItemStack(Items.NETHERITE_PICKAXE);
 
-        // Custom Name
         stack.set(DataComponentTypes.CUSTOM_NAME,
                 Text.literal("The One").formatted(Formatting.GOLD));
 
-        // Unbreakable
         stack.set(DataComponentTypes.UNBREAKABLE, Unit.INSTANCE);
 
-        // Custom Data
         NbtCompound custom = new NbtCompound();
         custom.putInt("error_pick", 1);
         stack.set(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(custom));
 
-        // Enchantments (1.21 system)
-        var enchantmentRegistry = lookup.getOrThrow(RegistryKeys.ENCHANTMENT);
+        var enchantmentRegistry = registryAccess.getOrThrow(RegistryKeys.ENCHANTMENT);
 
         ItemEnchantmentsComponent.Builder enchBuilder =
                 new ItemEnchantmentsComponent.Builder(ItemEnchantmentsComponent.DEFAULT);
@@ -57,10 +50,8 @@ public class ErrorPick {
 
         stack.set(DataComponentTypes.ENCHANTMENTS, enchBuilder.build());
 
-        // Force glint
         stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
 
-        // Hide enchantments + unbreakable + attributes in tooltip
         LinkedHashSet<ComponentType<?>> hidden = new LinkedHashSet<>();
         hidden.add(DataComponentTypes.ENCHANTMENTS);
         hidden.add(DataComponentTypes.UNBREAKABLE);
@@ -71,7 +62,6 @@ public class ErrorPick {
                 new TooltipDisplayComponent(false, hidden)
         );
 
-        // Repair cost
         stack.set(DataComponentTypes.REPAIR_COST, 9999999);
 
         return stack;

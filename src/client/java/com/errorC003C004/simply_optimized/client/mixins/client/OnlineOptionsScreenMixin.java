@@ -22,7 +22,7 @@ public abstract class OnlineOptionsScreenMixin extends Screen {
 
         ButtonWidget button = ButtonWidget.builder(
                 Text.literal(UIFunctions.getWhitelistText()),
-                b -> UIFunctions.clientWhitelist(b)
+                UIFunctions::clientWhitelist
         ).build();
         // Add using normal helper
         this.addDrawableChild(button);

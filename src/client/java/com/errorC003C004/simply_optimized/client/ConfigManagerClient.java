@@ -38,8 +38,7 @@ public class ConfigManagerClient {
     }
 
     public static boolean isShowImage() {
-        if (showImage) return true;
-        else return false;
+        return showImage;
     }
 
     public static void showImageFalse() {

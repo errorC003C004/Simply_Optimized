@@ -1,6 +1,5 @@
 package com.errorC003C004.simply_optimized.networking;
 
-import com.errorC003C004.simply_optimized.CommandInit;
 
 import com.errorC003C004.simply_optimized.ConfigManager;
 import com.google.gson.Gson;
@@ -10,8 +9,6 @@ import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.fabricmc.loader.api.FabricLoader;
@@ -21,9 +18,6 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class HandshakeServer {
     private HandshakeServer() {}

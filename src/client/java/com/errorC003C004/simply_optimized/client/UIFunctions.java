@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 public class UIFunctions {
     public static final Logger LOGGER = LoggerFactory.getLogger("simply_optimized");
 
-    //OnlineThingCheck
     public static boolean isImmortal = false;
 
     public static boolean WhitelistCheck(FabricClientCommandSource source) {
@@ -23,7 +22,6 @@ public class UIFunctions {
     //Buttons
     public static void immagebutton(MinecraftClient client) {
         LOGGER.info("Button pressed, Image");
-        //Do same as ConfigManagerClient.showImage = !ConfigManagerClient.showImage
         if (ConfigManagerClient.showImage) {
             ConfigManagerClient.showImageFalse();
         } else {
@@ -53,7 +51,7 @@ public class UIFunctions {
         }
         button.setMessage(Text.literal(getWhitelistText()));
 
-        LOGGER.info("Is Client Whitelisted is now " + ConfigManagerClient.isClientWhitelisted);
+        LOGGER.info("Client whitelist status: {}", ConfigManagerClient.isClientWhitelisted);
     }
 
     //Helpers
