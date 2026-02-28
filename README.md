@@ -30,3 +30,5 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 -- simply_fix (Adds user who runs this to Whitelist/Detected Clients if user is in frozen state)
 
 -- simply_reload (Loads Config)
+
+-- simply_updatecheck (Checks Pastebin for Updates)
