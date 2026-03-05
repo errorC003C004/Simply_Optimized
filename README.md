@@ -1,8 +1,8 @@
 # Simply Optimised
 
-Last Update: **1.1**
+Last Update: **1.2**
 <details>
-# <summary>Commands</summary>
+<summary>Cmds</summary>
 
 # Client Commands
 NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
