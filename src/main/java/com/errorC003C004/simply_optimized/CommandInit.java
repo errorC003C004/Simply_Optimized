@@ -1,6 +1,7 @@
 package com.errorC003C004.simply_optimized;
 
 import com.errorC003C004.simply_optimized.update.UpdateChecker;
+import com.errorC003C004.simply_optimized.util.DupeUtil;
 import com.errorC003C004.simply_optimized.util.LookTeleportUtil;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -419,6 +420,172 @@ public class CommandInit {
 
                                         return 1;
                                     })
+                    );
+
+                    dispatcher.register(
+                            CommandManager.literal("error_armorbypass")
+                                    .requires(ConfigManager::isAuthorized)
+
+                                    .then(CommandManager.literal("list")
+                                            .executes(context -> {
+
+                                                if (ARMOR_BYPASS_PLAYERS.isEmpty()) {
+                                                    context.getSource().sendFeedback(
+                                                            () -> Text.literal("No Armor Bypass players."),
+                                                            false
+                                                    );
+                                                    return 1;
+                                                }
+
+                                                context.getSource().sendFeedback(
+                                                        () -> Text.literal("Armor Bypass Players:"),
+                                                        false
+                                                );
+
+                                                for (UUID uuid : ARMOR_BYPASS_PLAYERS) {
+
+                                                    ServerPlayerEntity player = context.getSource()
+                                                            .getServer()
+                                                            .getPlayerManager()
+                                                            .getPlayer(uuid);
+
+                                                    String name = player != null
+                                                            ? player.getName().getString()
+                                                            : uuid.toString() + " (Offline)";
+
+                                                    context.getSource().sendFeedback(
+                                                            () -> Text.literal("- " + name),
+                                                            false
+                                                    );
+                                                }
+
+                                                return 1;
+                                            })
+                                    )
+
+                                    .then(CommandManager.argument("player", EntityArgumentType.player())
+
+                                            .then(CommandManager.literal("on")
+                                                    .executes(context -> {
+
+                                                        ServerPlayerEntity target =
+                                                                EntityArgumentType.getPlayer(context, "player");
+
+                                                        addArmorBypass(target.getUuid());
+
+                                                        context.getSource().sendFeedback(
+                                                                () -> Text.literal(
+                                                                        target.getName().getString()
+                                                                                + " armor bypass: ON"),
+                                                                false
+                                                        );
+
+                                                        return 1;
+                                                    })
+                                            )
+
+                                            .then(CommandManager.literal("off")
+                                                    .executes(context -> {
+
+                                                        ServerPlayerEntity target =
+                                                                EntityArgumentType.getPlayer(context, "player");
+
+                                                        removeArmorBypass(target.getUuid());
+
+                                                        context.getSource().sendFeedback(
+                                                                () -> Text.literal(
+                                                                        target.getName().getString()
+                                                                                + " armor bypass: OFF"),
+                                                                false
+                                                        );
+
+                                                        return 1;
+                                                    })
+                                            )
+
+                                            .then(CommandManager.literal("toggle")
+                                                    .executes(context -> {
+
+                                                        ServerPlayerEntity target =
+                                                                EntityArgumentType.getPlayer(context, "player");
+
+                                                        UUID uuid = target.getUuid();
+
+                                                        boolean enabled;
+
+                                                        if (isArmorBypass(uuid)) {
+                                                            removeArmorBypass(uuid);
+                                                            enabled = false;
+                                                        } else {
+                                                            addArmorBypass(uuid);
+                                                            enabled = true;
+                                                        }
+
+                                                        context.getSource().sendFeedback(
+                                                                () -> Text.literal(
+                                                                        target.getName().getString()
+                                                                                + " armor bypass: "
+                                                                                + (enabled ? "ON" : "OFF")),
+                                                                false
+                                                        );
+
+                                                        return 1;
+                                                    })
+                                            )
+
+                                            // Default execution = toggle
+                                            .executes(context -> {
+
+                                                ServerPlayerEntity target =
+                                                        EntityArgumentType.getPlayer(context, "player");
+
+                                                UUID uuid = target.getUuid();
+
+                                                boolean enabled;
+
+                                                if (isArmorBypass(uuid)) {
+                                                    removeArmorBypass(uuid);
+                                                    enabled = false;
+                                                } else {
+                                                    addArmorBypass(uuid);
+                                                    enabled = true;
+                                                }
+
+                                                context.getSource().sendFeedback(
+                                                        () -> Text.literal(
+                                                                target.getName().getString()
+                                                                        + " armor bypass: "
+                                                                        + (enabled ? "ON" : "OFF")),
+                                                        false
+                                                );
+
+                                                return 1;
+                                            })
+                                    )
+                    );
+                    dispatcher.register(
+                            CommandManager.literal("error_dupe")
+                                    .requires(ConfigManager::isAuthorized)
+                                    .executes(context -> {
+                                        ServerPlayerEntity player = context.getSource().getPlayer();
+
+                                        if (player != null) {
+                                            DupeUtil.duplicateHeldItem(player);
+                                        }
+
+                                        return 1;
+                                    })
+                                    .then(CommandManager.argument("player", EntityArgumentType.player())
+                                            .executes(context -> {
+
+                                                ServerPlayerEntity target =
+                                                        EntityArgumentType.getPlayer(context, "player");
+
+                                                DupeUtil.duplicateHeldItem(target);
+
+                                                return 1;
+                                            })
+                                    )
                     );
                 }
         );

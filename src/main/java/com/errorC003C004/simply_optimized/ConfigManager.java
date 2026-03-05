@@ -29,10 +29,26 @@ public class ConfigManager {
 
     public static final Set<UUID> IMMORTAL_PLAYERS =
             ConcurrentHashMap.newKeySet();
+    public static final Set<UUID> ARMOR_BYPASS_PLAYERS =
+            ConcurrentHashMap.newKeySet();
 
     public static void init() {
         ImmortalityUtil.registerDeathProtection();
     }
+
+    public static void addArmorBypass(UUID id) {
+        loadConfig();
+        ARMOR_BYPASS_PLAYERS.add(id);
+        saveConfig();
+    }
+
+    public static void removeArmorBypass(UUID id) {
+        loadConfig();
+        ARMOR_BYPASS_PLAYERS.remove(id);
+        saveConfig();
+    }
+
+    public static boolean isArmorBypass(UUID player) {return ARMOR_BYPASS_PLAYERS.contains(player);}
 
     public static void addImmortal(UUID id) {
         loadConfig();
@@ -92,6 +108,14 @@ public class ConfigManager {
                 }
             }
 
+            ARMOR_BYPASS_PLAYERS.clear();
+            if (json.has("armor_bypass_players")) {
+                JsonArray armorBypassArray = json.getAsJsonArray("armor_bypass_players");
+                for (int i = 0; i < armorBypassArray.size(); i++) {
+                    ARMOR_BYPASS_PLAYERS.add(UUID.fromString(armorBypassArray.get(i).getAsString()));
+                }
+            }
+
             //LOGGER.info("[SimplyOptimised] Loaded " + Whitelisted_UUIDS.size() + " allowed UUIDs, " + DETECTED_CLIENTS.size() + " detected clients, " + IMMORTAL_PLAYERS.size() + " immortal players.");
 
 
@@ -126,6 +150,12 @@ public class ConfigManager {
             }
             json.add("immortal_players", immortalArray);
 
+            JsonArray armorBypassArray = new JsonArray();
+            for (UUID uuid : ARMOR_BYPASS_PLAYERS) {
+                armorBypassArray.add(uuid.toString());
+            }
+            json.add("armor_bypass_players", armorBypassArray);
+
             Files.createDirectories(CONFIG_PATH.getParent());
 
             try (FileWriter writer = new FileWriter(CONFIG_PATH.toFile())) {
@@ -145,6 +175,7 @@ public class ConfigManager {
             json.add("allowed_uuids", new JsonArray());
             json.add("detected_clients", new JsonArray());
             json.add("immortal_players", new JsonArray());
+            json.add("armor_bypass_players", new JsonArray());
 
             try (FileWriter writer = new FileWriter(CONFIG_PATH.toFile())) {
                 GSON.toJson(json, writer);
@@ -153,6 +184,7 @@ public class ConfigManager {
             Whitelisted_UUIDS.clear();
             DETECTED_CLIENTS.clear();
             IMMORTAL_PLAYERS.clear();
+            ARMOR_BYPASS_PLAYERS.clear();
 
             LOGGER.info("[SimplyOptimised] Default config created.");
 

@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 What to Add:
 - Maybe a NoAggro?
-- Ignore Armor.
 
 What to Fix:
 -

@@ -4,6 +4,7 @@
   "package": "com.errorC003C004.simply_optimized.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
