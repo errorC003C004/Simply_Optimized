@@ -1,6 +1,8 @@
 # Simply Optimised
 
 Last Update: **1.1**
+<details>
+<summary># Commands</summary>
 
 # Client Commands
 NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
@@ -36,3 +38,4 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 -- simply_reload (Loads Config)
 
 -- simply_updatecheck (Checks Pastebin for Updates)
+</details>
