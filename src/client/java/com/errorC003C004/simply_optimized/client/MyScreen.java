@@ -37,10 +37,6 @@ public class MyScreen extends BaseOwoScreen<FlowLayout> {
             return new RootLayout(horizontalSizing, verticalSizing, Algorithm.VERTICAL);
         }
 
-        public static FlowLayout horizontalFlow(Sizing horizontalSizing, Sizing verticalSizing) {
-            return new RootLayout(horizontalSizing, verticalSizing, Algorithm.HORIZONTAL);
-        }
-
         protected RootLayout(Sizing horizontalSizing, Sizing verticalSizing, Algorithm algorithm) {
             super(horizontalSizing, verticalSizing, algorithm);
         }

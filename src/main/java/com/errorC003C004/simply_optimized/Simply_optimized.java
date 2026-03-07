@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 /*
 Fixed:
--
+- Most Warnings in Client
 
 Added:
 - Keybinds to Client For:

@@ -95,10 +95,6 @@ public class ConfigManagerClient {
                 toggleImmortalityKey = json.get("toggle_immortality_key").getAsInt();
             }
 
-            LOGGER.info("[SimplyOptimised] Player is "
-                    + (isClientWhitelisted ? "" : "NOT ")
-                    + "whitelisted. Show Image: " + showVisualizer);
-
         } catch (Exception e) {
             LOGGER.error("[SimplyOptimised] Config corrupted. Recreating.", e);
             createDefaultConfig();
