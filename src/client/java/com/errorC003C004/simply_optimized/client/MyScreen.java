@@ -89,7 +89,7 @@ public class MyScreen extends BaseOwoScreen<FlowLayout> {
                     MinecraftClient client = MinecraftClient.getInstance();
                     if (client.player == null) return;
 
-                    UIFunctions.KeybindTogglebutton(client);
+                    UIFunctions.keybindTogglebutton(client);
                     refreshKeybindText();
                 }
         );

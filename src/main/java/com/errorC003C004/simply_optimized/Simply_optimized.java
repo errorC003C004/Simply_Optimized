@@ -24,6 +24,8 @@ Added:
 - Owolib for Client
 (This took 5 hours btw)
 
+- /e_keybind_toggle command so everything matches
+
 What to Add:
 - Maybe a NoAggro?
 

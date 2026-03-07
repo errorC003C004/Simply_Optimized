@@ -38,10 +38,9 @@ public class UIFunctions {
         }
 
         ClientPlayNetworking.send(new ClientActionPayload(ClientActionPayload.Action.IMMORTALITY_TOGGLE));
-
     }
 
-    public static void KeybindTogglebutton(MinecraftClient client) {
+    public static void keybindTogglebutton(MinecraftClient client) {
         ConfigManagerClient.toggleKeybinds();
         if (client.currentScreen instanceof MyScreen screen) {
             screen.refreshgetImageText();
