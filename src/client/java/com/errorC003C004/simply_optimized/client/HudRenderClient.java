@@ -27,7 +27,7 @@ public class HudRenderClient {
         {
             return;
         }
-        if (!ConfigManagerClient.showImage) return;
+        if (!ConfigManagerClient.showVisualizer) return;
 
         int x = 5;
         int y = 5;

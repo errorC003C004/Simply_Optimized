@@ -6,7 +6,7 @@
   "description": "Simply Optimized on Fabric",
   "authors": ["errorC003C004"],
   "contact": {
-    "homepage": "https://guns.lol/errorC003C004"
+    "homepage": "https://github.com/errorC003C004/Simply_Optimized/"
   },
   "license": "All-Rights-Reserved",
   "icon": "assets/simply_optimized/icon.png",
@@ -33,5 +33,8 @@
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}"
+  },
+  "suggests": {
+    "owo-lib": "*"
   }
 }

@@ -1,68 +1,118 @@
 package com.errorC003C004.simply_optimized.client;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import io.wispforest.owo.ui.base.BaseOwoScreen;
+import io.wispforest.owo.ui.component.ButtonComponent;
+import io.wispforest.owo.ui.component.LabelComponent;
+import io.wispforest.owo.ui.container.FlowLayout;
+import io.wispforest.owo.ui.core.HorizontalAlignment;
+import io.wispforest.owo.ui.core.Insets;
+import io.wispforest.owo.ui.core.OwoUIAdapter;
+import io.wispforest.owo.ui.core.Sizing;
+import io.wispforest.owo.ui.core.Surface;
+import io.wispforest.owo.ui.core.VerticalAlignment;
+
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
-public class MyScreen extends Screen {
+import org.jetbrains.annotations.NotNull;
 
-    public ButtonWidget immortalityButton;
-    public ButtonWidget showHideImageButton;
+import static io.wispforest.owo.ui.component.UIComponents.button;
+import static io.wispforest.owo.ui.component.UIComponents.label;
 
-    public MyScreen() {
-        super(Text.literal("My UI"));
+public class MyScreen extends BaseOwoScreen<FlowLayout> {
+
+    public ButtonComponent immortalityButton;
+    public ButtonComponent showHideImageButton;
+    public ButtonComponent keybindTogglebutton;
+    public ButtonComponent closeButton;
+
+    @Override
+    protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
+        return OwoUIAdapter.create(this, RootLayout::verticalFlow);
+    }
+
+    private static class RootLayout extends FlowLayout {
+
+        public static FlowLayout verticalFlow(Sizing horizontalSizing, Sizing verticalSizing) {
+            return new RootLayout(horizontalSizing, verticalSizing, Algorithm.VERTICAL);
+        }
+
+        public static FlowLayout horizontalFlow(Sizing horizontalSizing, Sizing verticalSizing) {
+            return new RootLayout(horizontalSizing, verticalSizing, Algorithm.HORIZONTAL);
+        }
+
+        protected RootLayout(Sizing horizontalSizing, Sizing verticalSizing, Algorithm algorithm) {
+            super(horizontalSizing, verticalSizing, algorithm);
+        }
     }
 
     @Override
-    protected void init() {
+    protected void build(FlowLayout root) {
+        root.sizing(Sizing.fill(100), Sizing.fill(100));
+        root.gap(6);
+        root.horizontalAlignment(HorizontalAlignment.CENTER);
+        root.verticalAlignment(VerticalAlignment.CENTER);
 
-        int centerX = this.width / 2;
-        int centerY = this.height / 2;
-       showHideImageButton = ButtonWidget.builder(
+        FlowLayout panel = RootLayout.verticalFlow(Sizing.fixed(190), Sizing.content());
+        panel.gap(8);
+        panel.padding(Insets.of(10));
+        panel.horizontalAlignment(HorizontalAlignment.CENTER);
+        panel.surface(Surface.VANILLA_TRANSLUCENT);
+
+        LabelComponent title = label(Text.literal("Error's Client Mod"));
+        title.margins(Insets.bottom(4));
+
+        showHideImageButton = button(
                 Text.literal(getImageText()),
-                b ->
-                {
-                    if (this.client == null || this.client.player == null) return;
-                    UIFunctions.immagebutton(this.client);
+                button -> {
+                    MinecraftClient client = MinecraftClient.getInstance();
+                    if (client.player == null) return;
+
+                    UIFunctions.visualizerbutton(client);
+                    refreshgetImageText();
                 }
-        ).dimensions(centerX - 50, centerY - 24, 100, 20).build();
-
-        immortalityButton = ButtonWidget.builder(
-                Text.literal(getImmortalityText()),
-                b -> {
-                    if (this.client == null || this.client.player == null) return;
-                    UIFunctions.immortalitybutton(this.client);
-                    immortalityButton.active = false;
-                }
-        ).dimensions(centerX - 50, centerY, 100, 20).build();
-
-        ButtonWidget closeButton = ButtonWidget.builder(
-                Text.literal("Close"),
-                b -> this.client.setScreen(null)
-        ).dimensions(centerX - 50, centerY + 24, 100, 20).build();
-
-
-
-        this.addDrawableChild(showHideImageButton);
-        this.addDrawableChild(immortalityButton);
-        this.addDrawableChild(closeButton);
-    }
-
-    @Override
-    public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
-
-        ctx.fill(0, 0, this.width, this.height, 0x88000000);
-
-        super.render(ctx, mouseX, mouseY, delta);
-
-        ctx.drawCenteredTextWithShadow(
-                this.textRenderer,
-                "SCREEN OPENED",
-                this.width / 2,
-                this.height / 2 - 50,
-                0xFFFFFF
         );
+        showHideImageButton.sizing(Sizing.fill(100), Sizing.content());
+
+        immortalityButton = button(
+                Text.literal(getImmortalityText()),
+                button -> {
+                    MinecraftClient client = MinecraftClient.getInstance();
+                    if (client.player == null) return;
+
+                    UIFunctions.immortalitybutton(client);
+                    immortalityButton.active(false);
+                    refreshImmortalityText();
+                }
+        );
+        immortalityButton.sizing(Sizing.fill(100), Sizing.content());
+
+        keybindTogglebutton = button(
+                Text.literal(getKeybindText()),
+                button -> {
+                    MinecraftClient client = MinecraftClient.getInstance();
+                    if (client.player == null) return;
+
+                    UIFunctions.KeybindTogglebutton(client);
+                    refreshKeybindText();
+                }
+        );
+        keybindTogglebutton.sizing(Sizing.fill(100), Sizing.content());
+
+        closeButton = button(
+                Text.literal("Close"),
+                button -> MinecraftClient.getInstance().setScreen(null)
+        );
+        closeButton.sizing(Sizing.fill(100), Sizing.content());
+        closeButton.margins(Insets.top(4));
+
+        panel.child(title);
+        panel.child(showHideImageButton);
+        panel.child(immortalityButton);
+        panel.child(keybindTogglebutton);
+        panel.child(closeButton);
+
+        root.child(panel);
     }
 
     @Override
@@ -74,18 +124,24 @@ public class MyScreen extends Screen {
         return "Immortality: " + UIFunctions.isImmortal;
     }
 
+    private String getKeybindText() {
+        return "Keybinds: " + UIFunctions.usingKeybinds;
+    }
+
     public void refreshImmortalityText() {
         if (immortalityButton != null) {
             immortalityButton.setMessage(Text.literal(getImmortalityText()));
         }
     }
 
-    public String getImageText() {
-        if (!ConfigManagerClient.isShowImage()) {
-            return "Show Visualizer";
-        } else {
-            return "Hide Visualizer";
+    public void refreshKeybindText() {
+        if (keybindTogglebutton != null) {
+            keybindTogglebutton.setMessage(Text.literal(getKeybindText()));
         }
+    }
+
+    public String getImageText() {
+        return ConfigManagerClient.isShowVisualizer() ? "Hide Visualizer" : "Show Visualizer";
     }
 
     public void refreshgetImageText() {

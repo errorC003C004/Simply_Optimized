@@ -14,18 +14,18 @@ public class UIFunctions {
     public static final Logger LOGGER = LoggerFactory.getLogger("simply_optimized");
 
     public static boolean isImmortal = false;
+    public static boolean usingKeybinds = false;
 
     public static boolean WhitelistCheck(FabricClientCommandSource source) {
         return ConfigManagerClient.isClientWhitelisted;
     }
 
     //Buttons
-    public static void immagebutton(MinecraftClient client) {
-        LOGGER.info("Button pressed, Image");
-        if (ConfigManagerClient.showImage) {
-            ConfigManagerClient.showImageFalse();
+    public static void visualizerbutton(MinecraftClient client) {
+        if (ConfigManagerClient.showVisualizer) {
+            ConfigManagerClient.showVisualizerFalse();
         } else {
-            ConfigManagerClient.showImageTrue();
+            ConfigManagerClient.showVisualizerTrue();
         }
         if (client.currentScreen instanceof MyScreen screen) {
             screen.refreshgetImageText();
@@ -33,13 +33,19 @@ public class UIFunctions {
     }
 
     public static void immortalitybutton(MinecraftClient client) {
-        LOGGER.info("Button pressed, Immortality");
         if (client == null || client.player == null || client.getNetworkHandler() == null) {
             return;
         }
 
         ClientPlayNetworking.send(new ClientActionPayload(ClientActionPayload.Action.IMMORTALITY_TOGGLE));
 
+    }
+
+    public static void KeybindTogglebutton(MinecraftClient client) {
+        ConfigManagerClient.toggleKeybinds();
+        if (client.currentScreen instanceof MyScreen screen) {
+            screen.refreshgetImageText();
+        }
     }
 
     public static void clientWhitelist(ButtonWidget button) {

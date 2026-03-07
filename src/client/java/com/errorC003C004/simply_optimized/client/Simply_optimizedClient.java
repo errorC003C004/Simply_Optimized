@@ -12,6 +12,7 @@ public class Simply_optimizedClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ConfigManagerClient.loadConfig();
+        KeybindHandler.register();
         CommandInitClient.register();
         HudRenderClient.init();
 
