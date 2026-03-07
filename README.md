@@ -1,6 +1,6 @@
 # Simply Optimised
 
-Last Update: **1.2**
+Last Update: **1.3**
 <details>
 <summary>Cmds</summary>
 
@@ -10,6 +10,8 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 -- e_ui (shows ui)
 
 -- e_immortality_toggle (toggles immortality)
+
+-- e_keybind_toggle (toggles keybinds)
 # Server Commands
 **NEEDS WHITELIST**
 
