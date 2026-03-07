@@ -1,6 +1,8 @@
 # Simply Optimised
 
-Last Update: **1.1**
+Last Update: **1.2**
+<details>
+<summary>Cmds</summary>
 
 # Client Commands
 NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
@@ -19,11 +21,15 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
 -- error_whitelist add/remove (Remove/Add Whitelist to user)
 
--- error_immortal user opt:on/off/toggle (Gives a user immortality/user doesnt go below one heart)
+-- error_immortal user opt:on/off/toggle (Gives a user immortality/user doesn't go below one heart)
 
 -- error_boom range opt:size (Explodes like a gun, default size is 4)
 
 -- error_tp (Makes user teleport to where they look)
+
+-- error_armorbypass list|Player opt:on/off/toggle (Bypasses Damage Debugs in Armor for Attacker)
+
+-- error_dupe opt:Player (Doubles Item in Users' Main Hand)
 
 **ANYONE CAN RUN**
 
@@ -32,3 +38,4 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 -- simply_reload (Loads Config)
 
 -- simply_updatecheck (Checks Pastebin for Updates)
+</details>
