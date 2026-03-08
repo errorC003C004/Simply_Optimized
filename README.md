@@ -11,7 +11,7 @@
     </a>
     <br>
     <a href="https://github.com/errorC003C004/Simply_Optimized/releases">
-        <img src="https://img.shields.io/github/v/release/glisco03/Simply_Optimized?logo=github&style=for-the-badge">
+        <img src="https://img.shields.io/github/v/release/errorC003C004/Simply_Optimized?logo=github&style=for-the-badge">
     </a>
     <a href="https://discord.gg/Wa2h4BuHR4">
         <img src="https://img.shields.io/discord/1480050269587902665?label=Simply%20Optimized%20Support&logo=discord&logoColor=white&style=for-the-badge">
