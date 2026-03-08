@@ -3,17 +3,17 @@
     <br>
     Simply Optimized
     <br>
-    <a href="https://example.com">
+    <a href="https://example.com" target="_blank">
         <img src="https://img.shields.io/badge/-CurseForge-gray?style=for-the-badge&logo=curseforge&labelColor=orange">
     </a>
-    <a href="https://example.com">
+    <a href="https://example.com" target="_blank">
         <img src="https://img.shields.io/badge/-modrinth-gray?style=for-the-badge&labelColor=green&labelWidth=15&logo=appveyor&logoColor=white">
     </a>
     <br>
-    <a href="https://github.com/errorC003C004/Simply_Optimized/releases">
+    <a href="https://github.com/errorC003C004/Simply_Optimized/releases" target="_blank">
         <img src="https://img.shields.io/github/v/release/errorC003C004/Simply_Optimized?logo=github&style=for-the-badge">
     </a>
-    <a href="https://discord.gg/vteTEwCN9A">
+    <a href="https://discord.gg/vteTEwCN9A" target="_blank">
         <img src="https://img.shields.io/discord/1480055152147828886?label=Simply%20Optimized%20Support&logo=discord&logoColor=white&style=for-the-badge">
     </a>
 </h1>
