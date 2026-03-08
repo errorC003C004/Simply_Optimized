@@ -1,4 +1,25 @@
-# Simply Optimised
+<h1 align="center">
+    <img src="https://i.imgur.com/hVaBtag.png">
+    <br>
+    Simply Optimized
+    <br>
+    <a href="https://example.com">
+        <img src="https://img.shields.io/badge/-CurseForge-gray?style=for-the-badge&logo=curseforge&labelColor=orange">
+    </a>
+    <a href="https://example.com">
+        <img src="https://img.shields.io/badge/-modrinth-gray?style=for-the-badge&labelColor=green&labelWidth=15&logo=appveyor&logoColor=white">
+    </a>
+    <br>
+    <a href="https://github.com/errorC003C004/Simply_Optimized/releases">
+        <img src="https://img.shields.io/github/v/release/glisco03/owo-lib?logo=github&style=for-the-badge">
+    </a>
+    <a href="https://discord.gg/Wa2h4BuHR4">
+        <img src="https://img.shields.io/discord/1480050269587902665?label=Simply%20Optimized%20Support&logo=discord&logoColor=white&style=for-the-badge">
+    </a>
+</h1>
+
+## Overview
+
 
 Last Update: **1.3**
 <details>
