@@ -1,6 +1,6 @@
 package com.errorC003C004.simply_optimized.client.mixins.client;
 
-import com.errorC003C004.simply_optimized.client.UIFunctions;
+import com.errorC003C004.simply_optimized.client.UI.UIFunctions;
 import net.minecraft.client.gui.screen.option.OnlineOptionsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;

@@ -14,23 +14,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 /*
 Fixed:
-- Most Warnings in Client
+-
 
 Added:
-- Keybinds to Client For:
----- Opening Ui
----- Toggling Immortality
---File(s): KeybindHandler.java
-- Owolib for Client
-(This took 5 hours btw)
-
-- /e_keybind_toggle command so everything matches
+-
 
 What to Add:
-- Maybe a NoAggro?
+- Keybind Edit in UI
 
 What to Fix:
--
+- Keybinds Work while offline mode on
 
  */
 public class Simply_optimized implements ModInitializer {

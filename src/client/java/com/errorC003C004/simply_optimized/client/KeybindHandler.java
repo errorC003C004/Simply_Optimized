@@ -1,5 +1,7 @@
 package com.errorC003C004.simply_optimized.client;
 
+import com.errorC003C004.simply_optimized.client.UI.MyScreen;
+import com.errorC003C004.simply_optimized.client.UI.UIFunctions;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;
@@ -22,11 +24,11 @@ public class KeybindHandler {
             boolean toggleFeaturePressed =
                     GLFW.glfwGetKey(window, ConfigManagerClient.toggleImmortalityKey) == GLFW.GLFW_PRESS;
 
-            if (ConfigManagerClient.useKeybinds && openMenuPressed &&!openMenuWasPressed) {
+            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && openMenuPressed &&!openMenuWasPressed) {
                 onOpenMenu(client);
             }
 
-            if (ConfigManagerClient.useKeybinds && toggleFeaturePressed && !toggleFeatureWasPressed) {
+            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && toggleFeaturePressed && !toggleFeatureWasPressed) {
                 onImmortalityToggle(client);
             }
 

@@ -1,5 +1,7 @@
 package com.errorC003C004.simply_optimized.client;
 
+import com.errorC003C004.simply_optimized.client.UI.MyScreen;
+import com.errorC003C004.simply_optimized.client.UI.UIFunctions;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 

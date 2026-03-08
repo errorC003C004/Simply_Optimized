@@ -112,14 +112,14 @@ publishing {
     }
 }
 
-tasks.register("!serverclientinstall", Exec) {
-    group = "build"
+tasks.register("Install", Exec) {
+    group = "aerror"
     description = "Runs Fix Script"
     dependsOn tasks.build
     commandLine "python", "D:\\Juare\\AppData\\Roaming\\ATLauncher\\servers\\mtt\\!serverclientinstall.py"
 }
-tasks.register("buildAStartServer", Exec) {
-    group = "build"
+tasks.register("StartServer", Exec) {
+    group = "aerror"
     description = "Starts Server"
     commandLine 'cmd', '/c', 'start', '',
             'D:\\Juare\\AppData\\Roaming\\ATLauncher\\servers\\mtt\\!runserver.bat'

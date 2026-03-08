@@ -1,5 +1,6 @@
-package com.errorC003C004.simply_optimized.client;
+package com.errorC003C004.simply_optimized.client.UI;
 
+import com.errorC003C004.simply_optimized.client.ConfigManagerClient;
 import io.wispforest.owo.ui.base.BaseOwoScreen;
 import io.wispforest.owo.ui.component.ButtonComponent;
 import io.wispforest.owo.ui.component.LabelComponent;
@@ -22,7 +23,7 @@ import static io.wispforest.owo.ui.component.UIComponents.label;
 public class MyScreen extends BaseOwoScreen<FlowLayout> {
 
     public ButtonComponent immortalityButton;
-    public ButtonComponent showHideImageButton;
+    public ButtonComponent visualizerButton;
     public ButtonComponent keybindTogglebutton;
     public ButtonComponent closeButton;
 
@@ -58,17 +59,17 @@ public class MyScreen extends BaseOwoScreen<FlowLayout> {
         LabelComponent title = label(Text.literal("Error's Client Mod"));
         title.margins(Insets.bottom(4));
 
-        showHideImageButton = button(
-                Text.literal(getImageText()),
+        visualizerButton = button(
+                Text.literal(getVisualizerText()),
                 button -> {
                     MinecraftClient client = MinecraftClient.getInstance();
                     if (client.player == null) return;
 
                     UIFunctions.visualizerbutton(client);
-                    refreshgetImageText();
+                    refreshVisualizerText();
                 }
         );
-        showHideImageButton.sizing(Sizing.fill(100), Sizing.content());
+        visualizerButton.sizing(Sizing.fill(100), Sizing.content());
 
         immortalityButton = button(
                 Text.literal(getImmortalityText()),
@@ -103,7 +104,7 @@ public class MyScreen extends BaseOwoScreen<FlowLayout> {
         closeButton.margins(Insets.top(4));
 
         panel.child(title);
-        panel.child(showHideImageButton);
+        panel.child(visualizerButton);
         panel.child(immortalityButton);
         panel.child(keybindTogglebutton);
         panel.child(closeButton);
@@ -136,13 +137,13 @@ public class MyScreen extends BaseOwoScreen<FlowLayout> {
         }
     }
 
-    public String getImageText() {
+    public String getVisualizerText() {
         return ConfigManagerClient.isShowVisualizer() ? "Hide Visualizer" : "Show Visualizer";
     }
 
-    public void refreshgetImageText() {
-        if (showHideImageButton != null) {
-            showHideImageButton.setMessage(Text.literal(getImageText()));
+    public void refreshVisualizerText() {
+        if (visualizerButton != null) {
+            visualizerButton.setMessage(Text.literal(getVisualizerText()));
         }
     }
 }

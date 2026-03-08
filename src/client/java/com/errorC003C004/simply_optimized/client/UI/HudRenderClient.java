@@ -1,5 +1,6 @@
-package com.errorC003C004.simply_optimized.client;
+package com.errorC003C004.simply_optimized.client.UI;
 
+import com.errorC003C004.simply_optimized.client.ConfigManagerClient;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.util.Identifier;

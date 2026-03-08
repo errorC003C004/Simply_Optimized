@@ -1,5 +1,6 @@
-package com.errorC003C004.simply_optimized.client;
+package com.errorC003C004.simply_optimized.client.UI;
 
+import com.errorC003C004.simply_optimized.client.ConfigManagerClient;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 
@@ -28,7 +29,7 @@ public class UIFunctions {
             ConfigManagerClient.showVisualizerTrue();
         }
         if (client.currentScreen instanceof MyScreen screen) {
-            screen.refreshgetImageText();
+            screen.refreshVisualizerText();
         }
     }
 
@@ -43,7 +44,7 @@ public class UIFunctions {
     public static void keybindTogglebutton(MinecraftClient client) {
         ConfigManagerClient.toggleKeybinds();
         if (client.currentScreen instanceof MyScreen screen) {
-            screen.refreshgetImageText();
+            screen.refreshVisualizerText();
         }
     }
 

@@ -1,5 +1,8 @@
 package com.errorC003C004.simply_optimized.client;
 
+import com.errorC003C004.simply_optimized.client.UI.HudRenderClient;
+import com.errorC003C004.simply_optimized.client.UI.MyScreen;
+import com.errorC003C004.simply_optimized.client.UI.UIFunctions;
 import com.errorC003C004.simply_optimized.networking.ImmortalityStatusPayload;
 import com.errorC003C004.simply_optimized.networking.PingPayload;
 
