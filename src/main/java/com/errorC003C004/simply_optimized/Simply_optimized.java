@@ -16,7 +16,7 @@ import java.util.Base64;
 Fixed:
 -
 
-Added:
+TODO:
 - Keybind Menu to UI
 
 What to Add:
