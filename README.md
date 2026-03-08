@@ -26,7 +26,7 @@ Last Update: **1.3**
 <details>
 <summary>Cmds</summary>
 
-# Client Commands
+## Client Commands
 NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
 -- e_ui (shows ui)
@@ -34,7 +34,7 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 -- e_immortality_toggle (toggles immortality)
 
 -- e_keybind_toggle (toggles keybinds)
-# Server Commands
+## Server Commands
 **NEEDS WHITELIST**
 
 -- error_op/deop user (Gives/Removes user stated op)
