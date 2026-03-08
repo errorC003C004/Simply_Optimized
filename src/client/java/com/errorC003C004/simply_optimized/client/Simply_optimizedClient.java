@@ -1,7 +1,7 @@
 package com.errorC003C004.simply_optimized.client;
 
-import com.errorC003C004.simply_optimized.client.UI.HudRenderClient;
-import com.errorC003C004.simply_optimized.client.UI.MyScreen;
+import com.errorC003C004.simply_optimized.client.UI.VisualizerClient;
+import com.errorC003C004.simply_optimized.client.UI.MainScreen;
 import com.errorC003C004.simply_optimized.client.UI.UIFunctions;
 import com.errorC003C004.simply_optimized.networking.ImmortalityStatusPayload;
 import com.errorC003C004.simply_optimized.networking.PingPayload;
@@ -17,7 +17,7 @@ public class Simply_optimizedClient implements ClientModInitializer {
         ConfigManagerClient.loadConfig();
         KeybindHandler.register();
         CommandInitClient.register();
-        HudRenderClient.init();
+        VisualizerClient.init();
 
         // Existing handshake ping
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
@@ -34,7 +34,7 @@ public class Simply_optimizedClient implements ClientModInitializer {
                     context.client().execute(() -> {
                         UIFunctions.isImmortal = payload.immortal();
 
-                        if (context.client().currentScreen instanceof MyScreen screen) {
+                        if (context.client().currentScreen instanceof MainScreen screen) {
                             screen.refreshImmortalityText();
                             screen.immortalityButton.active = true;
                         }

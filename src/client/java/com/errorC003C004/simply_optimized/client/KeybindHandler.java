@@ -1,6 +1,6 @@
 package com.errorC003C004.simply_optimized.client;
 
-import com.errorC003C004.simply_optimized.client.UI.MyScreen;
+import com.errorC003C004.simply_optimized.client.UI.MainScreen;
 import com.errorC003C004.simply_optimized.client.UI.UIFunctions;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
@@ -38,7 +38,7 @@ public class KeybindHandler {
     }
 
     private static void onOpenMenu(MinecraftClient client) {
-        client.execute(() -> client.setScreen(new MyScreen()));
+        client.execute(() -> client.setScreen(new MainScreen()));
     }
 
     private static void onImmortalityToggle(MinecraftClient client) {

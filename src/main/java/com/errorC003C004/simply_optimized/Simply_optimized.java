@@ -17,13 +17,17 @@ Fixed:
 -
 
 Added:
--
+- Keybind Menu to UI
 
 What to Add:
 - Keybind Edit in UI
+- Instakill
 
 What to Fix:
-- Keybinds Work while offline mode on
+-
+
+Ideas:
+- Maybe error_boom shows a warden shriek line
 
  */
 public class Simply_optimized implements ModInitializer {

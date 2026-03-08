@@ -28,7 +28,7 @@ public class UIFunctions {
         } else {
             ConfigManagerClient.showVisualizerTrue();
         }
-        if (client.currentScreen instanceof MyScreen screen) {
+        if (client.currentScreen instanceof MainScreen screen) {
             screen.refreshVisualizerText();
         }
     }
@@ -43,7 +43,7 @@ public class UIFunctions {
 
     public static void keybindTogglebutton(MinecraftClient client) {
         ConfigManagerClient.toggleKeybinds();
-        if (client.currentScreen instanceof MyScreen screen) {
+        if (client.currentScreen instanceof MainScreen screen) {
             screen.refreshVisualizerText();
         }
     }

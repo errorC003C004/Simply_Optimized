@@ -8,7 +8,7 @@ import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
 
-public class HudRenderClient {
+public class VisualizerClient {
 
     private static final Identifier BAD =
             Identifier.of("simply_optimized", "textures/gui/test_bad.png");
@@ -19,7 +19,7 @@ public class HudRenderClient {
         HudElementRegistry.attachElementBefore(
                 VanillaHudElements.CHAT,
                 Identifier.of("simply_optimised", "my_hud"),
-                HudRenderClient::render
+                VisualizerClient::render
         );
     }
 

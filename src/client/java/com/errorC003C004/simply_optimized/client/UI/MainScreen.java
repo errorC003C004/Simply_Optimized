@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import static io.wispforest.owo.ui.component.UIComponents.button;
 import static io.wispforest.owo.ui.component.UIComponents.label;
 
-public class MyScreen extends BaseOwoScreen<FlowLayout> {
+public class MainScreen extends BaseOwoScreen<FlowLayout> {
 
     public ButtonComponent immortalityButton;
     public ButtonComponent visualizerButton;
@@ -42,7 +42,20 @@ public class MyScreen extends BaseOwoScreen<FlowLayout> {
             super(horizontalSizing, verticalSizing, algorithm);
         }
     }
+    public boolean mouseClicked(net.minecraft.client.gui.Click click, boolean doubleClick) {
 
+        if (click.button() == 1) { // right click
+            double mouseX = click.x();
+            double mouseY = click.y();
+
+            if (keybindTogglebutton != null && keybindTogglebutton.isInBoundingBox(mouseX, mouseY)) {
+                MinecraftClient.getInstance().setScreen(new KeybindsScreen());
+                return true;
+            }
+        }
+
+        return super.mouseClicked(click, doubleClick);
+    }
     @Override
     protected void build(FlowLayout root) {
         root.sizing(Sizing.fill(100), Sizing.fill(100));
@@ -61,7 +74,7 @@ public class MyScreen extends BaseOwoScreen<FlowLayout> {
 
         visualizerButton = button(
                 Text.literal(getVisualizerText()),
-                button -> {
+                b ->{
                     MinecraftClient client = MinecraftClient.getInstance();
                     if (client.player == null) return;
 
@@ -73,7 +86,7 @@ public class MyScreen extends BaseOwoScreen<FlowLayout> {
 
         immortalityButton = button(
                 Text.literal(getImmortalityText()),
-                button -> {
+                b ->{
                     MinecraftClient client = MinecraftClient.getInstance();
                     if (client.player == null) return;
 
@@ -84,9 +97,10 @@ public class MyScreen extends BaseOwoScreen<FlowLayout> {
         );
         immortalityButton.sizing(Sizing.fill(100), Sizing.content());
 
+
         keybindTogglebutton = button(
                 Text.literal(getKeybindText()),
-                button -> {
+                b ->{
                     MinecraftClient client = MinecraftClient.getInstance();
                     if (client.player == null) return;
 
@@ -98,7 +112,7 @@ public class MyScreen extends BaseOwoScreen<FlowLayout> {
 
         closeButton = button(
                 Text.literal("Close"),
-                button -> MinecraftClient.getInstance().setScreen(null)
+                b ->MinecraftClient.getInstance().setScreen(null)
         );
         closeButton.sizing(Sizing.fill(100), Sizing.content());
         closeButton.margins(Insets.top(4));
