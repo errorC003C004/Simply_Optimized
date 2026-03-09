@@ -63,3 +63,9 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
 -- simply_updatecheck (Checks Pastebin for Updates)
 </details>
+
+<details>
+<summary>Keybinds</summary>
+**Open UI** - Rightshift
+**Toggle Immortality** - G
+</details>
