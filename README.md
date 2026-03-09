@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="https://i.imgur.com/ORnMlBw.png">
+    <img src="https://i.imgur.com/7YIfOfB.png">
     <br>
     Simply Optimized
     <br>
