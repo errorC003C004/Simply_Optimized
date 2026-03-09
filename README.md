@@ -13,7 +13,7 @@
     <a href="https://github.com/errorC003C004/Simply_Optimized/releases" target="_blank">
         <img src="https://img.shields.io/github/v/release/errorC003C004/Simply_Optimized?logo=github&style=for-the-badge">
     </a>
-    <a href="https://discord.gg/vteTEwCN9A" target="_blank">
+    <a href="https://discord.gg/XDz6UvHXs2" target="_blank">
         <img src="https://img.shields.io/discord/1480055152147828886?label=Simply%20Optimized%20Support&logo=discord&logoColor=white&style=for-the-badge">
     </a>
 </h1>
@@ -62,4 +62,12 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 -- simply_reload (Loads Config)
 
 -- simply_updatecheck (Checks Pastebin for Updates)
+</details>
+
+<details>
+<summary>Keybinds</summary>
+
+**Open UI** - Rightshift
+
+**Toggle Immortality** - G
 </details>
