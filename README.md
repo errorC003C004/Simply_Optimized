@@ -20,7 +20,7 @@
 
 ## Overview
 
-A networking mod for Servers, not much affect for clients.
+A networking mod for Servers
 
 Last Update: **1.3**
 <details>
