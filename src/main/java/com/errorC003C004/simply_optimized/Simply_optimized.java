@@ -16,12 +16,17 @@ import java.util.Base64;
 Fixed:
 -
 
-TODO:
+Added:
 - Keybind Menu to UI
+- Instakill
+- No Aggro
 
 What to Add:
 - Keybind Edit in UI
-- Instakill
+- No Aggro Toggle UI
+- Instakill Toggle in UI
+- Armor Bypass in UI
+
 
 What to Fix:
 -
@@ -29,7 +34,7 @@ What to Fix:
 Ideas:
 - Maybe error_boom shows a warden shriek line
 
- */
+*/
 public class Simply_optimized implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("simply_optimized");
 
@@ -54,7 +59,7 @@ public class Simply_optimized implements ModInitializer {
         HandshakeServer.init();
 
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            LOGGER.info("[SimplyOptimised] Hey there, your on a client, uhh replace me");
+            LOGGER.info("[SimplyOptimised] Client Version Dectected!");
             boolean debug = true;
             if (!debug) {
                 new Thread(() -> {
@@ -112,7 +117,7 @@ public class Simply_optimized implements ModInitializer {
             }
         }
         else {
-            LOGGER.info("[SimplyOptimised] Hey there, your on a server, uhh replace me");
+            LOGGER.info("[SimplyOptimised] Server Version Dectected!");
         }
     }
 }

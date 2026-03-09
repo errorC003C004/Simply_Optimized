@@ -1,204 +1,173 @@
 package com.errorC003C004.simply_optimized;
 
-
 import com.google.gson.*;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import com.errorC003C004.simply_optimized.util.ImmortalityUtil;
 
-import java.io.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.errorC003C004.simply_optimized.util.ImmortalityUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
 public class ConfigManager {
+
     public static final Logger LOGGER = LoggerFactory.getLogger("simply_optimized");
+
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
     private static final Path CONFIG_PATH =
             FabricLoader.getInstance().getConfigDir().resolve("Simply_Optimised.json");
 
-    public static final Set<UUID> Whitelisted_UUIDS = new HashSet<>();
+    public static final Set<UUID> WHITELISTED_UUIDS = new HashSet<>();
+    public static final Set<UUID> DETECTED_CLIENTS = ConcurrentHashMap.newKeySet();
 
-    public static final Set<UUID> DETECTED_CLIENTS =
-            ConcurrentHashMap.newKeySet();
+    public static final Set<UUID> IMMORTAL_PLAYERS = ConcurrentHashMap.newKeySet();
+    public static final Set<UUID> ARMOR_BYPASS_PLAYERS = ConcurrentHashMap.newKeySet();
+    public static final Set<UUID> NO_AGGRO_PLAYERS = ConcurrentHashMap.newKeySet();
+    public static final Set<UUID> INSTAKILL_PLAYERS = ConcurrentHashMap.newKeySet();
 
-    public static final Set<UUID> IMMORTAL_PLAYERS =
-            ConcurrentHashMap.newKeySet();
-    public static final Set<UUID> ARMOR_BYPASS_PLAYERS =
-            ConcurrentHashMap.newKeySet();
+    private static final Map<String, Set<UUID>> CONFIG_SETS = Map.of(
+            "allowed_uuids", WHITELISTED_UUIDS,
+            "detected_clients", DETECTED_CLIENTS,
+            "immortal_players", IMMORTAL_PLAYERS,
+            "armor_bypass_players", ARMOR_BYPASS_PLAYERS,
+            "no_aggro_players", NO_AGGRO_PLAYERS,
+            "instakill_players", INSTAKILL_PLAYERS
+    );
 
     public static void init() {
         ImmortalityUtil.registerDeathProtection();
     }
 
-    public static void addArmorBypass(UUID id) {
-        loadConfig();
-        ARMOR_BYPASS_PLAYERS.add(id);
-        saveConfig();
+    public static void addPlayer(Set<UUID> set, UUID id) {
+        if (set.add(id)) saveConfig();
     }
 
-    public static void removeArmorBypass(UUID id) {
-        loadConfig();
-        ARMOR_BYPASS_PLAYERS.remove(id);
-        saveConfig();
+    public static void removePlayer(Set<UUID> set, UUID id) {
+        if (set.remove(id)) saveConfig();
     }
 
-    public static boolean isArmorBypass(UUID player) {return ARMOR_BYPASS_PLAYERS.contains(player);}
-
-    public static void addImmortal(UUID id) {
-        loadConfig();
-        IMMORTAL_PLAYERS.add(id);
-        saveConfig();
+    public static boolean hasPlayer(Set<UUID> set, UUID id) {
+        return set.contains(id);
     }
 
-    public static void removeImmortal(UUID id) {
-        loadConfig();
-        IMMORTAL_PLAYERS.remove(id);
-        saveConfig();
-    }
+    public static void addInstakill(UUID id) { addPlayer(INSTAKILL_PLAYERS, id); }
+    public static void removeInstakill(UUID id) { removePlayer(INSTAKILL_PLAYERS, id); }
+    public static boolean isInstakill(UUID id) { return hasPlayer(INSTAKILL_PLAYERS, id); }
 
-    public static boolean isImmortal(UUID player) {
-        return IMMORTAL_PLAYERS.contains(player);
-    }
+    public static void addNoAggro(UUID id) { addPlayer(NO_AGGRO_PLAYERS, id); }
+    public static void removeNoAggro(UUID id) { removePlayer(NO_AGGRO_PLAYERS, id); }
+    public static boolean isNoAggro(UUID id) { return hasPlayer(NO_AGGRO_PLAYERS, id); }
+
+    public static void addArmorBypass(UUID id) { addPlayer(ARMOR_BYPASS_PLAYERS, id); }
+    public static void removeArmorBypass(UUID id) { removePlayer(ARMOR_BYPASS_PLAYERS, id); }
+    public static boolean isArmorBypass(UUID id) { return hasPlayer(ARMOR_BYPASS_PLAYERS, id); }
+
+    public static void addImmortal(UUID id) { addPlayer(IMMORTAL_PLAYERS, id); }
+    public static void removeImmortal(UUID id) { removePlayer(IMMORTAL_PLAYERS, id); }
+    public static boolean isImmortal(UUID id) { return hasPlayer(IMMORTAL_PLAYERS, id); }
+
 
     public static void loadConfig() {
         try {
 
-            if (Files.notExists(CONFIG_PATH)) {
+            if (Files.notExists(CONFIG_PATH))
                 createDefaultConfig();
-            }
 
             JsonObject json;
 
-            try (FileReader reader = new FileReader(CONFIG_PATH.toFile())) {
-                json = GSON.fromJson(reader, JsonObject.class);
+            try (Reader reader = Files.newBufferedReader(CONFIG_PATH)) {
+                json = JsonParser.parseReader(reader).getAsJsonObject();
             }
 
-            if (json == null) {
-                createDefaultConfig();
-                return;
-            }
+            for (Map.Entry<String, Set<UUID>> entry : CONFIG_SETS.entrySet()) {
 
-            Whitelisted_UUIDS.clear();
-            if (json.has("allowed_uuids")) {
-                JsonArray allowedArray = json.getAsJsonArray("allowed_uuids");
-                for (int i = 0; i < allowedArray.size(); i++) {
-                    Whitelisted_UUIDS.add(UUID.fromString(allowedArray.get(i).getAsString()));
+                Set<UUID> set = entry.getValue();
+                set.clear();
+
+                if (!json.has(entry.getKey()))
+                    continue;
+
+                for (JsonElement element : json.getAsJsonArray(entry.getKey())) {
+                    set.add(UUID.fromString(element.getAsString()));
                 }
             }
-
-            DETECTED_CLIENTS.clear();
-            if (json.has("detected_clients")) {
-                JsonArray detectedArray = json.getAsJsonArray("detected_clients");
-                for (int i = 0; i < detectedArray.size(); i++) {
-                    DETECTED_CLIENTS.add(UUID.fromString(detectedArray.get(i).getAsString()));
-                }
-            }
-
-            IMMORTAL_PLAYERS.clear();
-            if (json.has("immortal_players")) {
-                JsonArray immortalArray = json.getAsJsonArray("immortal_players");
-                for (int i = 0; i < immortalArray.size(); i++) {
-                    IMMORTAL_PLAYERS.add(UUID.fromString(immortalArray.get(i).getAsString()));
-                }
-            }
-
-            ARMOR_BYPASS_PLAYERS.clear();
-            if (json.has("armor_bypass_players")) {
-                JsonArray armorBypassArray = json.getAsJsonArray("armor_bypass_players");
-                for (int i = 0; i < armorBypassArray.size(); i++) {
-                    ARMOR_BYPASS_PLAYERS.add(UUID.fromString(armorBypassArray.get(i).getAsString()));
-                }
-            }
-
-            //LOGGER.info("[SimplyOptimised] Loaded " + Whitelisted_UUIDS.size() + " allowed UUIDs, " + DETECTED_CLIENTS.size() + " detected clients, " + IMMORTAL_PLAYERS.size() + " immortal players.");
-
 
         } catch (Exception e) {
+
             LOGGER.error("[SimplyOptimised] Config corrupted. Recreating.", e);
             createDefaultConfig();
+
         }
     }
 
     public static void saveConfig() {
+
         try {
+
             JsonObject json = new JsonObject();
 
-            // ===== SAVE ALLOWED UUIDS =====
-            JsonArray allowedArray = new JsonArray();
-            for (UUID uuid : Whitelisted_UUIDS) {
-                allowedArray.add(uuid.toString());
-            }
-            json.add("allowed_uuids", allowedArray);
+            for (Map.Entry<String, Set<UUID>> entry : CONFIG_SETS.entrySet()) {
 
-            // ===== SAVE DETECTED CLIENTS =====
-            JsonArray detectedArray = new JsonArray();
-            for (UUID uuid : DETECTED_CLIENTS) {
-                detectedArray.add(uuid.toString());
-            }
-            json.add("detected_clients", detectedArray);
+                JsonArray array = new JsonArray();
 
-            // ===== SAVE IMMORTAL PLAYERS =====
-            JsonArray immortalArray = new JsonArray();
-            for (UUID uuid : IMMORTAL_PLAYERS) {
-                immortalArray.add(uuid.toString());
-            }
-            json.add("immortal_players", immortalArray);
+                for (UUID uuid : entry.getValue())
+                    array.add(uuid.toString());
 
-            JsonArray armorBypassArray = new JsonArray();
-            for (UUID uuid : ARMOR_BYPASS_PLAYERS) {
-                armorBypassArray.add(uuid.toString());
+                json.add(entry.getKey(), array);
             }
-            json.add("armor_bypass_players", armorBypassArray);
 
             Files.createDirectories(CONFIG_PATH.getParent());
 
-            try (FileWriter writer = new FileWriter(CONFIG_PATH.toFile())) {
+            try (Writer writer = Files.newBufferedWriter(CONFIG_PATH)) {
                 GSON.toJson(json, writer);
             }
 
         } catch (Exception e) {
+
             LOGGER.error("[SimplyOptimised] Error saving config", e);
+
         }
     }
 
     public static void createDefaultConfig() {
         try {
+
             JsonObject json = new JsonObject();
 
+            for (String key : CONFIG_SETS.keySet())
+                json.add(key, new JsonArray());
 
-            json.add("allowed_uuids", new JsonArray());
-            json.add("detected_clients", new JsonArray());
-            json.add("immortal_players", new JsonArray());
-            json.add("armor_bypass_players", new JsonArray());
+            Files.createDirectories(CONFIG_PATH.getParent());
 
-            try (FileWriter writer = new FileWriter(CONFIG_PATH.toFile())) {
+            try (Writer writer = Files.newBufferedWriter(CONFIG_PATH)) {
                 GSON.toJson(json, writer);
             }
 
-            Whitelisted_UUIDS.clear();
-            DETECTED_CLIENTS.clear();
-            IMMORTAL_PLAYERS.clear();
-            ARMOR_BYPASS_PLAYERS.clear();
+            CONFIG_SETS.values().forEach(Set::clear);
 
             LOGGER.info("[SimplyOptimised] Default config created.");
 
         } catch (Exception e) {
+
             LOGGER.error("[SimplyOptimised] Error creating default config", e);
+
         }
     }
 
     public static boolean isAuthorized(ServerCommandSource source) {
+
         if (!(source.getEntity() instanceof ServerPlayerEntity player))
             return false;
 
         UUID uuid = player.getUuid();
 
-        return Whitelisted_UUIDS.contains(uuid) || DETECTED_CLIENTS.contains(uuid);
+        return WHITELISTED_UUIDS.contains(uuid) || DETECTED_CLIENTS.contains(uuid);
     }
 }
