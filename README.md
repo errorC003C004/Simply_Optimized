@@ -3,7 +3,7 @@
     <br>
     Simply Optimized
     <br>
-    <a href="https://example.com" target="_blank">
+    <a href="https://curseforge.com/minecraft/mc-mods/simply-optimized" target="_blank">
         <img src="https://img.shields.io/badge/-CurseForge-gray?style=for-the-badge&logo=curseforge&labelColor=orange">
     </a>
     <a href="https://example.com" target="_blank">
