@@ -66,6 +66,8 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
 <details>
 <summary>Keybinds</summary>
+
 **Open UI** - Rightshift
+
 **Toggle Immortality** - G
 </details>
