@@ -1,9 +1,9 @@
 <h1 align="center">
-    <img src="https://i.imgur.com/hVaBtag.png">
+    <img src="https://i.imgur.com/7YIfOfB.png">
     <br>
     Simply Optimized
     <br>
-    <a href="https://example.com" target="_blank">
+    <a href="https://curseforge.com/minecraft/mc-mods/simply-optimized" target="_blank">
         <img src="https://img.shields.io/badge/-CurseForge-gray?style=for-the-badge&logo=curseforge&labelColor=orange">
     </a>
     <a href="https://example.com" target="_blank">
@@ -20,7 +20,7 @@
 
 ## Overview
 
-A networking mod for Servers, not much affect for clients.
+A networking mod for Servers
 
 Last Update: **1.3**
 <details>
