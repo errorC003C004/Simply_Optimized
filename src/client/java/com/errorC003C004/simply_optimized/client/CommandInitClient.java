@@ -27,25 +27,6 @@ public class CommandInitClient {
                                         return 1;
                                     })
                     );
-                    dispatcher.register(
-                            ClientCommandManager.literal("e_immortality_toggle")
-                                    .requires(UIFunctions::WhitelistCheck)
-                                    .executes(context -> {
-                                        MinecraftClient client = MinecraftClient.getInstance();
-                                        UIFunctions.immortalitybutton(client);
-                                        return 1;
-                                    })
-                    );
-                    dispatcher.register(
-                            ClientCommandManager.literal("e_keybind_toggle")
-                                    .requires(UIFunctions::WhitelistCheck)
-                                    .executes(context -> {
-                                        MinecraftClient client = MinecraftClient.getInstance();
-                                        UIFunctions.keybindTogglebutton(client);
-                                        return 1;
-                                    })
-                    );
-
                 }
         );
     }

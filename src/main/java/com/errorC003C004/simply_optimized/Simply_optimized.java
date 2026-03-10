@@ -20,18 +20,22 @@ Added:
 - Keybind Menu to UI
 - Instakill
 - No Aggro
+- Toggle Screen For UI
+-- No Aggro Toggle UI
+-- Instakill Toggle in UI
+-- Armor Bypass in UI
 
 What to Add:
 - Keybind Edit in UI
-- No Aggro Toggle UI
-- Instakill Toggle in UI
-- Armor Bypass in UI
-
+- Look TP/Boom as Keybind
 
 What to Fix:
 -
 
 Ideas:
+-
+
+Trashed Ideas:
 - Maybe error_boom shows a warden shriek line
 
 */
@@ -49,8 +53,8 @@ public class Simply_optimized implements ModInitializer {
                 PingPayload.CODEC
         );
         PayloadTypeRegistry.playS2C().register(
-                ImmortalityStatusPayload.ID,
-                ImmortalityStatusPayload.CODEC
+                ToggleStatusPayload.ID,
+                ToggleStatusPayload.CODEC
         );
         PayloadTypeRegistry.playC2S().register(
                 ClientActionPayload.ID,

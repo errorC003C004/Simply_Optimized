@@ -15,6 +15,9 @@ public class UIFunctions {
     public static final Logger LOGGER = LoggerFactory.getLogger("simply_optimized");
 
     public static boolean isImmortal = false;
+    public static boolean isNoAggro = false;
+    public static boolean isInstakill = false;
+    public static boolean isArmorBypass = false;
     public static boolean usingKeybinds = false;
 
     public static boolean WhitelistCheck(FabricClientCommandSource source) {
@@ -28,7 +31,7 @@ public class UIFunctions {
         } else {
             ConfigManagerClient.showVisualizerTrue();
         }
-        if (client.currentScreen instanceof MainScreen screen) {
+        if (client.currentScreen instanceof TogglesScreen screen) {
             screen.refreshVisualizerText();
         }
     }
@@ -41,12 +44,42 @@ public class UIFunctions {
         ClientPlayNetworking.send(new ClientActionPayload(ClientActionPayload.Action.IMMORTALITY_TOGGLE));
     }
 
+    public static void noaggrobutton(MinecraftClient client) {
+        if (client == null ||  client.player == null || client.getNetworkHandler() == null) {
+            return;
+        }
+
+        ClientPlayNetworking.send(new ClientActionPayload(ClientActionPayload.Action.NO_AGGRO_TOGGLE));
+    }
+
+    public static void instakillbutton(MinecraftClient client) {
+        if (client == null ||  client.player == null || client.getNetworkHandler() == null) {
+            return;
+        }
+
+        ClientPlayNetworking.send(new ClientActionPayload(ClientActionPayload.Action.INSTAKILL_TOGGLE));
+    }
+
+    public static void armorbypassbutton(MinecraftClient client) {
+        if (client == null ||  client.player == null || client.getNetworkHandler() == null) {
+            return;
+        }
+
+        ClientPlayNetworking.send(new ClientActionPayload(ClientActionPayload.Action.ARMOR_BYPASS_TOGGLE));
+    }
+
+
+
+
     public static void keybindTogglebutton(MinecraftClient client) {
         ConfigManagerClient.toggleKeybinds();
-        if (client.currentScreen instanceof MainScreen screen) {
+        if (client.currentScreen instanceof TogglesScreen screen) {
             screen.refreshVisualizerText();
         }
     }
+
+
+
 
     public static void clientWhitelist(ButtonWidget button) {
         if (ConfigManagerClient.isClientWhitelisted) {

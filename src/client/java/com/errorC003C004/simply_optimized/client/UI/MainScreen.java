@@ -1,6 +1,5 @@
 package com.errorC003C004.simply_optimized.client.UI;
 
-import com.errorC003C004.simply_optimized.client.ConfigManagerClient;
 import io.wispforest.owo.ui.base.BaseOwoScreen;
 import io.wispforest.owo.ui.component.ButtonComponent;
 import io.wispforest.owo.ui.component.LabelComponent;
@@ -22,8 +21,7 @@ import static io.wispforest.owo.ui.component.UIComponents.label;
 
 public class MainScreen extends BaseOwoScreen<FlowLayout> {
 
-    public ButtonComponent immortalityButton;
-    public ButtonComponent visualizerButton;
+    public ButtonComponent togglesScreenButton;
     public ButtonComponent keybindTogglebutton;
     public ButtonComponent closeButton;
 
@@ -72,31 +70,16 @@ public class MainScreen extends BaseOwoScreen<FlowLayout> {
         LabelComponent title = label(Text.literal("Error's Client Mod"));
         title.margins(Insets.bottom(4));
 
-        visualizerButton = button(
-                Text.literal(getVisualizerText()),
+        togglesScreenButton = button(
+                Text.literal("Toggles"),
                 b ->{
                     MinecraftClient client = MinecraftClient.getInstance();
                     if (client.player == null) return;
 
-                    UIFunctions.visualizerbutton(client);
-                    refreshVisualizerText();
+                    MinecraftClient.getInstance().setScreen(new TogglesScreen());
                 }
         );
-        visualizerButton.sizing(Sizing.fill(100), Sizing.content());
-
-        immortalityButton = button(
-                Text.literal(getImmortalityText()),
-                b ->{
-                    MinecraftClient client = MinecraftClient.getInstance();
-                    if (client.player == null) return;
-
-                    UIFunctions.immortalitybutton(client);
-                    immortalityButton.active(false);
-                    refreshImmortalityText();
-                }
-        );
-        immortalityButton.sizing(Sizing.fill(100), Sizing.content());
-
+        togglesScreenButton.sizing(Sizing.fill(100), Sizing.content());
 
         keybindTogglebutton = button(
                 Text.literal(getKeybindText()),
@@ -118,8 +101,7 @@ public class MainScreen extends BaseOwoScreen<FlowLayout> {
         closeButton.margins(Insets.top(4));
 
         panel.child(title);
-        panel.child(visualizerButton);
-        panel.child(immortalityButton);
+        panel.child(togglesScreenButton);
         panel.child(keybindTogglebutton);
         panel.child(closeButton);
 
@@ -131,18 +113,9 @@ public class MainScreen extends BaseOwoScreen<FlowLayout> {
         return false;
     }
 
-    private String getImmortalityText() {
-        return "Immortality: " + UIFunctions.isImmortal;
-    }
 
     private String getKeybindText() {
         return "Keybinds: " + UIFunctions.usingKeybinds;
-    }
-
-    public void refreshImmortalityText() {
-        if (immortalityButton != null) {
-            immortalityButton.setMessage(Text.literal(getImmortalityText()));
-        }
     }
 
     public void refreshKeybindText() {
@@ -151,13 +124,4 @@ public class MainScreen extends BaseOwoScreen<FlowLayout> {
         }
     }
 
-    public String getVisualizerText() {
-        return ConfigManagerClient.isShowVisualizer() ? "Hide Visualizer" : "Show Visualizer";
-    }
-
-    public void refreshVisualizerText() {
-        if (visualizerButton != null) {
-            visualizerButton.setMessage(Text.literal(getVisualizerText()));
-        }
-    }
 }

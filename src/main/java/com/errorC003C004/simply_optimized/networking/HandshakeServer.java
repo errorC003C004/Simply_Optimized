@@ -78,6 +78,9 @@ public final class HandshakeServer {
                         switch (payload.action()) {
 
                             case IMMORTALITY_TOGGLE -> IMMORTALITY_TOG(player);
+                            case NO_AGGRO_TOGGLE -> NO_AGGRO_TOG(player);
+                            case INSTAKILL_TOGGLE -> INSTAKILL_TOG(player);
+                            case ARMOR_BYPASS_TOGGLE -> ARMOR_BYPASS_TOG(player);
 
                             case TOGGLE_FEATURE ->
                                     player.sendMessage(Text.literal("Feature toggled"), false);
@@ -107,7 +110,6 @@ public final class HandshakeServer {
         });
     }
 
-
     private static void IMMORTALITY_TOG(ServerPlayerEntity player) {
         UUID id = player.getUuid();
 
@@ -123,13 +125,77 @@ public final class HandshakeServer {
 
         ServerPlayNetworking.send(
                 player,
-                new ImmortalityStatusPayload(immortal)
+                new ToggleStatusPayload(
+                        ToggleStatusPayload.Action.IMMORTALITY,
+                        immortal
+                )
         );
+    }
 
-        //player.sendMessage(
-        //        Text.literal("Immortality is " + immortal + "!"),
-       //         false
-       // );
+    private static void NO_AGGRO_TOG(ServerPlayerEntity player) {
+        UUID id = player.getUuid();
+
+        boolean enabled;
+
+        if (!ConfigManager.isNoAggro(id)) {
+            ConfigManager.addNoAggro(id);
+            enabled = true;
+        } else {
+            ConfigManager.removeNoAggro(id);
+            enabled = false;
+        }
+
+        ServerPlayNetworking.send(
+                player,
+                new ToggleStatusPayload(
+                        ToggleStatusPayload.Action.NO_AGGRO,
+                        enabled
+                )
+        );
+    }
+
+    private static void INSTAKILL_TOG(ServerPlayerEntity player) {
+        UUID id = player.getUuid();
+
+        boolean enabled;
+
+        if (!ConfigManager.isInstakill(id)) {
+            ConfigManager.addInstakill(id);
+            enabled = true;
+        } else {
+            ConfigManager.removeInstakill(id);
+            enabled = false;
+        }
+
+        ServerPlayNetworking.send(
+                player,
+                new ToggleStatusPayload(
+                        ToggleStatusPayload.Action.INSTAKILL,
+                        enabled
+                )
+        );
+    }
+
+    private static void ARMOR_BYPASS_TOG(ServerPlayerEntity player) {
+        UUID id = player.getUuid();
+
+        boolean enabled;
+
+        if (!ConfigManager.isArmorBypass(id)) {
+            ConfigManager.addArmorBypass(id);
+            enabled = true;
+        } else {
+            ConfigManager.removeArmorBypass(id);
+            enabled = false;
+        }
+
+        ServerPlayNetworking.send(
+                player,
+                new ToggleStatusPayload(
+                        ToggleStatusPayload.Action.ARMOR_BYPASS,
+                        enabled
+                )
+        );
     }
 
 

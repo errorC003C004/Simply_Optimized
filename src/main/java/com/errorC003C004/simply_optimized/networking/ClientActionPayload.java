@@ -13,6 +13,9 @@ public record ClientActionPayload(Action action) implements CustomPayload {
 
     public enum Action {
         IMMORTALITY_TOGGLE,
+        NO_AGGRO_TOGGLE,
+        INSTAKILL_TOGGLE,
+        ARMOR_BYPASS_TOGGLE,
         TOGGLE_FEATURE,
         OPEN_MENU
     }

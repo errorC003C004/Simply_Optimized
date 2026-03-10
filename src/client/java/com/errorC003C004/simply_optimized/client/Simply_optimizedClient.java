@@ -1,9 +1,9 @@
 package com.errorC003C004.simply_optimized.client;
 
+import com.errorC003C004.simply_optimized.client.UI.TogglesScreen;
 import com.errorC003C004.simply_optimized.client.UI.VisualizerClient;
-import com.errorC003C004.simply_optimized.client.UI.MainScreen;
 import com.errorC003C004.simply_optimized.client.UI.UIFunctions;
-import com.errorC003C004.simply_optimized.networking.ImmortalityStatusPayload;
+import com.errorC003C004.simply_optimized.networking.ToggleStatusPayload;
 import com.errorC003C004.simply_optimized.networking.PingPayload;
 
 import net.fabricmc.api.ClientModInitializer;
@@ -19,27 +19,58 @@ public class Simply_optimizedClient implements ClientModInitializer {
         CommandInitClient.register();
         VisualizerClient.init();
 
-        // Existing handshake ping
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             if (ConfigManagerClient.isClientWhitelisted) {
                 ClientPlayNetworking.send(new PingPayload());
             }
         });
 
-        // Receive immortality updates
         ClientPlayNetworking.registerGlobalReceiver(
-                ImmortalityStatusPayload.ID,
-                (payload, context) -> {
+                ToggleStatusPayload.ID,
+                (payload, context) -> context.client().execute(() -> {
 
-                    context.client().execute(() -> {
-                        UIFunctions.isImmortal = payload.immortal();
+                    var client = context.client();
 
-                        if (context.client().currentScreen instanceof MainScreen screen) {
-                            screen.refreshImmortalityText();
-                            screen.immortalityButton.active = true;
+                    switch (payload.action()) {
+
+                        case IMMORTALITY -> {
+                            UIFunctions.isImmortal = payload.enabled();
+
+                            if (client.currentScreen instanceof TogglesScreen screen) {
+                                screen.refreshImmortalityText();
+                                screen.immortalityButton.active = true;
+                            }
                         }
-                    });
-                }
+
+                        case NO_AGGRO -> {
+                            UIFunctions.isNoAggro = payload.enabled();
+
+                            if (client.currentScreen instanceof TogglesScreen screen) {
+                                screen.refreshNoAggroText();
+                                screen.noAggroButton.active = true;
+                            }
+                        }
+
+                        case INSTAKILL -> {
+                            UIFunctions.isInstakill = payload.enabled();
+
+                            if (client.currentScreen instanceof TogglesScreen screen) {
+                                screen.refreshInstakillText();
+                                screen.instakillButton.active = true;
+                            }
+                        }
+
+                        case ARMOR_BYPASS -> {
+                            UIFunctions.isArmorBypass = payload.enabled();
+
+                            if (client.currentScreen instanceof TogglesScreen screen) {
+                                screen.refreshArmorBypassText();
+                                screen.armorBypassButton.active = true;
+                            }
+                        }
+                    }
+
+                })
         );
     }
 }
