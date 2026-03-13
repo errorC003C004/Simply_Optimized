@@ -16,8 +16,9 @@ public record ClientActionPayload(Action action) implements CustomPayload {
         NO_AGGRO_TOGGLE,
         INSTAKILL_TOGGLE,
         ARMOR_BYPASS_TOGGLE,
-        TOGGLE_FEATURE,
-        OPEN_MENU
+        RAILGUN_PLAYER,
+        TP_PLAYER,
+        DUPE
     }
 
     public static final PacketCodec<RegistryByteBuf, ClientActionPayload> CODEC =

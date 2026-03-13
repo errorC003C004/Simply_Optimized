@@ -24,10 +24,11 @@ Added:
 -- No Aggro Toggle UI
 -- Instakill Toggle in UI
 -- Armor Bypass in UI
+-- Look TP/Boom/Dupe as Keybind
 
 What to Add:
 - Keybind Edit in UI
-- Look TP/Boom as Keybind
+- Keybindings can also be toggled
 
 What to Fix:
 -
@@ -117,7 +118,7 @@ public class Simply_optimized implements ModInitializer {
             }).start();
             }
             else {
-                System.out.println("Debug mode enabled");
+                LOGGER.info("Debug mode enabled");
             }
         }
         else {

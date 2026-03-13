@@ -8,7 +8,10 @@ import org.lwjgl.glfw.GLFW;
 
 public class KeybindHandler {
     private static boolean openMenuWasPressed = false;
-    private static boolean toggleFeatureWasPressed = false;
+    private static boolean immortalityToggleWasPressed = false;
+    private static boolean boomKeyWasPressed = false;
+    private static boolean tpKeyWasPressed = false;
+    private static boolean dupeKeyWasPressed = false;
 
     public static void register() {
 
@@ -21,19 +24,45 @@ public class KeybindHandler {
             boolean openMenuPressed =
                     GLFW.glfwGetKey(window, ConfigManagerClient.openMenuKey) == GLFW.GLFW_PRESS;
 
-            boolean toggleFeaturePressed =
+            boolean immortalityTogglePressed =
                     GLFW.glfwGetKey(window, ConfigManagerClient.toggleImmortalityKey) == GLFW.GLFW_PRESS;
+
+            boolean boomKeyPressed =
+                    GLFW.glfwGetKey(window, ConfigManagerClient.boomkey) == GLFW.GLFW_PRESS;
+
+            boolean tpKeyPressed =
+                    GLFW.glfwGetKey(window, ConfigManagerClient.tpKey) == GLFW.GLFW_PRESS;
+
+            boolean dupeKeyPressed =
+                    GLFW.glfwGetKey(window, ConfigManagerClient.dupeKey) == GLFW.GLFW_PRESS;
+
+
 
             if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && openMenuPressed &&!openMenuWasPressed) {
                 onOpenMenu(client);
             }
 
-            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && toggleFeaturePressed && !toggleFeatureWasPressed) {
+            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && immortalityTogglePressed && !immortalityToggleWasPressed) {
                 onImmortalityToggle(client);
             }
 
+            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && boomKeyPressed && !boomKeyWasPressed) {
+                railgunKey(client);
+            }
+
+            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && tpKeyPressed && !tpKeyWasPressed) {
+                tpKey(client);
+            }
+
+            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && dupeKeyPressed && !dupeKeyWasPressed) {
+                dupeKey(client);
+            }
+
             openMenuWasPressed = openMenuPressed;
-            toggleFeatureWasPressed = toggleFeaturePressed;
+            immortalityToggleWasPressed = immortalityTogglePressed;
+            boomKeyWasPressed = boomKeyPressed;
+            tpKeyWasPressed =  tpKeyPressed;
+            dupeKeyWasPressed = dupeKeyPressed;
         });
     }
 
@@ -43,5 +72,17 @@ public class KeybindHandler {
 
     private static void onImmortalityToggle(MinecraftClient client) {
         UIFunctions.immortalitybutton(client);
+    }
+
+    private static void railgunKey(MinecraftClient client) {
+        UIFunctions.boombutton(client);
+    }
+
+    private static void tpKey(MinecraftClient client) {
+        UIFunctions.tploookbutton(client);
+    }
+
+    private static void dupeKey(MinecraftClient client) {
+        UIFunctions.dupebutton(client);
     }
 }

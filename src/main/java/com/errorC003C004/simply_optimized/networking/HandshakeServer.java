@@ -2,6 +2,9 @@ package com.errorC003C004.simply_optimized.networking;
 
 
 import com.errorC003C004.simply_optimized.ConfigManager;
+import com.errorC003C004.simply_optimized.util.DupeUtil;
+import com.errorC003C004.simply_optimized.util.LookExplosionUtil;
+import com.errorC003C004.simply_optimized.util.LookTeleportUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -81,12 +84,9 @@ public final class HandshakeServer {
                             case NO_AGGRO_TOGGLE -> NO_AGGRO_TOG(player);
                             case INSTAKILL_TOGGLE -> INSTAKILL_TOG(player);
                             case ARMOR_BYPASS_TOGGLE -> ARMOR_BYPASS_TOG(player);
-
-                            case TOGGLE_FEATURE ->
-                                    player.sendMessage(Text.literal("Feature toggled"), false);
-
-                            case OPEN_MENU ->
-                                    player.sendMessage(Text.literal("Menu opened"), false);
+                            case RAILGUN_PLAYER -> RAINGUN_PLAYER_ACT(player);
+                            case TP_PLAYER -> TP_PLAYER_ACT(player);
+                            case DUPE -> DUPE_ACT(player);
                         }
                     });
                 }
@@ -196,6 +196,18 @@ public final class HandshakeServer {
                         enabled
                 )
         );
+    }
+
+    private static void RAINGUN_PLAYER_ACT(ServerPlayerEntity player) {
+        LookExplosionUtil.railgunTunnel(player, 75, 4);
+    }
+
+    private static void TP_PLAYER_ACT(ServerPlayerEntity player) {
+        LookTeleportUtil.lookTeleport(player);
+    }
+
+    private static void DUPE_ACT(ServerPlayerEntity player) {
+        DupeUtil.duplicateHeldItem(player);
     }
 
 

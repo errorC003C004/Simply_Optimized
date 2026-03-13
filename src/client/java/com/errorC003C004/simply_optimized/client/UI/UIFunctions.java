@@ -68,6 +68,30 @@ public class UIFunctions {
         ClientPlayNetworking.send(new ClientActionPayload(ClientActionPayload.Action.ARMOR_BYPASS_TOGGLE));
     }
 
+    public static void boombutton(MinecraftClient client) {
+        if (client == null ||  client.player == null || client.getNetworkHandler() == null) {
+            return;
+        }
+
+        ClientPlayNetworking.send(new ClientActionPayload(ClientActionPayload.Action.RAILGUN_PLAYER));
+    }
+
+    public static void tploookbutton(MinecraftClient client) {
+        if (client == null ||  client.player == null || client.getNetworkHandler() == null) {
+            return;
+        }
+
+        ClientPlayNetworking.send(new ClientActionPayload(ClientActionPayload.Action.TP_PLAYER));
+    }
+
+    public static void dupebutton(MinecraftClient client) {
+        if (client == null ||  client.player == null || client.getNetworkHandler() == null) {
+            return;
+        }
+
+        ClientPlayNetworking.send(new ClientActionPayload(ClientActionPayload.Action.DUPE));
+    }
+
 
 
 

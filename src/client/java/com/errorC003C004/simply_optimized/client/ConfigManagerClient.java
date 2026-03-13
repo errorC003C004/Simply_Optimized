@@ -27,6 +27,9 @@ public class ConfigManagerClient {
     public static boolean useKeybinds = false;
     public static int openMenuKey = GLFW.GLFW_KEY_RIGHT_SHIFT;
     public static int toggleImmortalityKey = GLFW.GLFW_KEY_G;
+    public static int boomkey = GLFW.GLFW_KEY_KP_0;
+    public static int tpKey = GLFW.GLFW_KEY_KP_ENTER;
+    public static int dupeKey = GLFW.GLFW_KEY_KP_1;
 
     public static void toggleKeybinds() {
         useKeybinds = !useKeybinds;
@@ -96,6 +99,18 @@ public class ConfigManagerClient {
                 toggleImmortalityKey = json.get("toggle_immortality_key").getAsInt();
             }
 
+            if (json.has("boom_key")) {
+                boomkey = json.get("boom_key").getAsInt();
+            }
+
+            if (json.has("tp_key")) {
+                tpKey = json.get("tp_key").getAsInt();
+            }
+
+            if (json.has("dupe_key")) {
+                dupeKey = json.get("dupe_key").getAsInt();
+            }
+
         } catch (Exception e) {
             LOGGER.error("[SimplyOptimised] Config corrupted. Recreating.", e);
             createDefaultConfig();
@@ -112,6 +127,9 @@ public class ConfigManagerClient {
             json.addProperty("use_keybinds", useKeybinds);
             json.addProperty("open_menu_key", openMenuKey);
             json.addProperty("toggle_immortality_key", toggleImmortalityKey);
+            json.addProperty("boom_key", boomkey);
+            json.addProperty("tp_key", tpKey);
+            json.addProperty("dupe_key", dupeKey);
 
 
             Files.createDirectories(CONFIG_PATH.getParent());
