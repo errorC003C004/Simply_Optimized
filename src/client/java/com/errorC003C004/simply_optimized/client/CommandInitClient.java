@@ -14,7 +14,6 @@ public class CommandInitClient {
 
         ClientCommandRegistrationCallback.EVENT.register(
                 (dispatcher, registryAccess) -> {
-
                     dispatcher.register(
                             ClientCommandManager.literal("e_ui")
                                     .requires(UIFunctions::WhitelistCheck)

@@ -135,6 +135,7 @@ public class TogglesScreen extends BaseOwoScreen<FlowLayout> {
 
         backButton.sizing(Sizing.fill(100), Sizing.content());
 
+        panel.child(title);
         panel.child(visualizerButton);
         panel.child(immortalityButton);
         panel.child(noAggroButton);

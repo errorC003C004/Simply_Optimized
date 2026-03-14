@@ -1,5 +1,6 @@
 package com.errorC003C004.simply_optimized.client;
 
+import com.errorC003C004.simply_optimized.client.UI.ClickGuiScreen;
 import com.errorC003C004.simply_optimized.client.UI.MainScreen;
 import com.errorC003C004.simply_optimized.client.UI.UIFunctions;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -38,23 +39,23 @@ public class KeybindHandler {
 
 
 
-            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && openMenuPressed &&!openMenuWasPressed) {
+            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && openMenuPressed &&!openMenuWasPressed && UIFunctions.usingMenuKeybind) {
                 onOpenMenu(client);
             }
 
-            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && immortalityTogglePressed && !immortalityToggleWasPressed) {
+            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && immortalityTogglePressed && !immortalityToggleWasPressed && UIFunctions.usingImmortalityKeybind) {
                 onImmortalityToggle(client);
             }
 
-            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && boomKeyPressed && !boomKeyWasPressed) {
+            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && boomKeyPressed && !boomKeyWasPressed && UIFunctions.usingBoomKeybind) {
                 railgunKey(client);
             }
 
-            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && tpKeyPressed && !tpKeyWasPressed) {
+            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && tpKeyPressed && !tpKeyWasPressed && UIFunctions.usingTPKeybind) {
                 tpKey(client);
             }
 
-            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && dupeKeyPressed && !dupeKeyWasPressed) {
+            if (ConfigManagerClient.useKeybinds && ConfigManagerClient.isClientWhitelisted && dupeKeyPressed && !dupeKeyWasPressed && UIFunctions.usingDupeKeybind) {
                 dupeKey(client);
             }
 
@@ -68,6 +69,7 @@ public class KeybindHandler {
 
     private static void onOpenMenu(MinecraftClient client) {
         client.execute(() -> client.setScreen(new MainScreen()));
+        //MinecraftClient.getInstance().setScreen(new ClickGuiScreen());
     }
 
     private static void onImmortalityToggle(MinecraftClient client) {

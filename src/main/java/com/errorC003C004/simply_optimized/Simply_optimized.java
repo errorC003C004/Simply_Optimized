@@ -24,7 +24,7 @@ Added:
 -- No Aggro Toggle UI
 -- Instakill Toggle in UI
 -- Armor Bypass in UI
--- Look TP/Boom/Dupe as Keybind
+--- Look TP/Boom/Dupe as Keybind
 
 What to Add:
 - Keybind Edit in UI
@@ -34,7 +34,7 @@ What to Fix:
 -
 
 Ideas:
--
+- Invis
 
 Trashed Ideas:
 - Maybe error_boom shows a warden shriek line

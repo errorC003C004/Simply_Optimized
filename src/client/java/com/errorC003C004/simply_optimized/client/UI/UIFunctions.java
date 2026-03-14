@@ -11,6 +11,8 @@ import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 public class UIFunctions {
     public static final Logger LOGGER = LoggerFactory.getLogger("simply_optimized");
 
@@ -18,7 +20,14 @@ public class UIFunctions {
     public static boolean isNoAggro = false;
     public static boolean isInstakill = false;
     public static boolean isArmorBypass = false;
+
     public static boolean usingKeybinds = false;
+
+    public static boolean usingMenuKeybind = true;
+    public static boolean usingImmortalityKeybind = true;
+    public static boolean usingBoomKeybind = true;
+    public static boolean usingTPKeybind = true;
+    public static boolean usingDupeKeybind = true;
 
     public static boolean WhitelistCheck(FabricClientCommandSource source) {
         return ConfigManagerClient.isClientWhitelisted;
@@ -122,5 +131,30 @@ public class UIFunctions {
         return ConfigManagerClient.isClientWhitelisted
                 ? "Whitelist Client: On"
                 : "Whitelist Client: Off";
+    }
+
+    public static void setKeybindStatus(String type)
+    {
+        switch (type) {
+            case "Menu":
+                usingMenuKeybind = !usingMenuKeybind;
+                break;
+
+            case "Immortality":
+                usingImmortalityKeybind = !usingImmortalityKeybind;
+                break;
+
+            case "Boom":
+                usingBoomKeybind = !usingBoomKeybind;
+                break;
+
+            case "TP":
+                usingTPKeybind = !usingTPKeybind;
+                break;
+
+            case "Dupe":
+                usingDupeKeybind = !usingDupeKeybind;
+                break;
+        }
     }
 }
