@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import com.errorC003C004.simply_optimized.networking.ClientActionPayload;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;

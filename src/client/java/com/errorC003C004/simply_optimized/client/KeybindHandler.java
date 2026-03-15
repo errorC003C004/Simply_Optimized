@@ -68,8 +68,8 @@ public class KeybindHandler {
     }
 
     private static void onOpenMenu(MinecraftClient client) {
-        client.execute(() -> client.setScreen(new MainScreen()));
-        //MinecraftClient.getInstance().setScreen(new ClickGuiScreen());
+        //client.execute(() -> client.setScreen(new MainScreen()));
+        MinecraftClient.getInstance().setScreen(new ClickGuiScreen());
     }
 
     private static void onImmortalityToggle(MinecraftClient client) {

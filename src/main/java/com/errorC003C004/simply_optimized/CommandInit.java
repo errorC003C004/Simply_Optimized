@@ -71,6 +71,15 @@ public class CommandInit {
                     ConfigManager::isInstakill
             ));
 
+            dispatcher.register(createToggleCommand(
+                    "error_invis",
+                    INVIS_PLAYERS,
+                    "Invisibility",
+                    ConfigManager::addInvis,
+                    ConfigManager::removeInvis,
+                    ConfigManager::isInvis
+            ));
+
         });
     }
 

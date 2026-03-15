@@ -1,5 +1,6 @@
 package com.errorC003C004.simply_optimized.client;
 
+import com.errorC003C004.simply_optimized.client.UI.ClickGuiScreen;
 import com.errorC003C004.simply_optimized.client.UI.TogglesScreen;
 import com.errorC003C004.simply_optimized.client.UI.VisualizerClient;
 import com.errorC003C004.simply_optimized.client.UI.UIFunctions;
@@ -40,12 +41,20 @@ public class Simply_optimizedClient implements ClientModInitializer {
                                 screen.refreshImmortalityText();
                                 screen.immortalityButton.active = true;
                             }
+                            if (client.currentScreen instanceof ClickGuiScreen screen) {
+                                screen.refreshImmortalityText();
+                                screen.immortalityButton.active = true;
+                            }
                         }
 
                         case NO_AGGRO -> {
                             UIFunctions.isNoAggro = payload.enabled();
 
                             if (client.currentScreen instanceof TogglesScreen screen) {
+                                screen.refreshNoAggroText();
+                                screen.noAggroButton.active = true;
+                            }
+                            if (client.currentScreen instanceof ClickGuiScreen screen) {
                                 screen.refreshNoAggroText();
                                 screen.noAggroButton.active = true;
                             }
@@ -58,12 +67,20 @@ public class Simply_optimizedClient implements ClientModInitializer {
                                 screen.refreshInstakillText();
                                 screen.instakillButton.active = true;
                             }
+                            if (client.currentScreen instanceof ClickGuiScreen screen) {
+                                screen.refreshInstakillText();
+                                screen.instakillButton.active = true;
+                            }
                         }
 
                         case ARMOR_BYPASS -> {
                             UIFunctions.isArmorBypass = payload.enabled();
 
                             if (client.currentScreen instanceof TogglesScreen screen) {
+                                screen.refreshArmorBypassText();
+                                screen.armorBypassButton.active = true;
+                            }
+                            if (client.currentScreen instanceof ClickGuiScreen screen) {
                                 screen.refreshArmorBypassText();
                                 screen.armorBypassButton.active = true;
                             }

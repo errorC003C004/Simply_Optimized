@@ -42,27 +42,4 @@ public class ImmortalityUtil {
     private static boolean isImmortal(ServerPlayerEntity player) {
         return ConfigManager.isImmortal(player.getUuid());
     }
-
-    public static boolean togglePlayer(ServerPlayerEntity player) {
-        UUID id = player.getUuid();
-
-        if (ConfigManager.isImmortal(id)) {
-            ConfigManager.removeImmortal(id);
-            return false;
-        } else {
-            ConfigManager.addImmortal(id);
-            return true;
-        }
-    }
-
-    public static void ImmortalOff(ServerPlayerEntity player) {
-        UUID id = player.getUuid();
-        if (ConfigManager.isImmortal(id)) {
-            ConfigManager.removeImmortal(id);
-        }
-    }
-
-    public static void ImmortalOn(ServerPlayerEntity player) {
-        ConfigManager.addImmortal(player.getUuid());
-    }
 }

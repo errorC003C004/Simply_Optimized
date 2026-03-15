@@ -1,5 +1,6 @@
 package com.errorC003C004.simply_optimized;
 
+import com.errorC003C004.simply_optimized.util.InvisibilityUtil;
 import com.google.gson.*;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.ServerCommandSource;
@@ -31,6 +32,7 @@ public class ConfigManager {
     public static final Set<UUID> ARMOR_BYPASS_PLAYERS = ConcurrentHashMap.newKeySet();
     public static final Set<UUID> NO_AGGRO_PLAYERS = ConcurrentHashMap.newKeySet();
     public static final Set<UUID> INSTAKILL_PLAYERS = ConcurrentHashMap.newKeySet();
+    public static final Set<UUID> INVIS_PLAYERS = ConcurrentHashMap.newKeySet();
 
     private static final Map<String, Set<UUID>> CONFIG_SETS = Map.of(
             "allowed_uuids", WHITELISTED_UUIDS,
@@ -38,11 +40,13 @@ public class ConfigManager {
             "immortal_players", IMMORTAL_PLAYERS,
             "armor_bypass_players", ARMOR_BYPASS_PLAYERS,
             "no_aggro_players", NO_AGGRO_PLAYERS,
-            "instakill_players", INSTAKILL_PLAYERS
+            "instakill_players", INSTAKILL_PLAYERS,
+            "invis_players", INVIS_PLAYERS
     );
 
     public static void init() {
         ImmortalityUtil.registerDeathProtection();
+        InvisibilityUtil.registerInvisibility();
     }
 
     public static void addPlayer(Set<UUID> set, UUID id) {
@@ -56,6 +60,10 @@ public class ConfigManager {
     public static boolean hasPlayer(Set<UUID> set, UUID id) {
         return set.contains(id);
     }
+
+    public static void addInvis(UUID id) { addPlayer(INVIS_PLAYERS, id); }
+    public static void removeInvis(UUID id) { removePlayer(INVIS_PLAYERS, id); }
+    public static boolean isInvis(UUID id) { return INVIS_PLAYERS.contains(id); }
 
     public static void addInstakill(UUID id) { addPlayer(INSTAKILL_PLAYERS, id); }
     public static void removeInstakill(UUID id) { removePlayer(INSTAKILL_PLAYERS, id); }

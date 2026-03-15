@@ -28,8 +28,6 @@ public class KeybindsScreen extends BaseOwoScreen<FlowLayout> {
     public ButtonComponent TPKeyTog;
     public ButtonComponent DupeKeyTog;
 
-
-
     @Override
     protected @NotNull OwoUIAdapter<FlowLayout> createAdapter() {
         return OwoUIAdapter.create(this, RootLayout::verticalFlow);

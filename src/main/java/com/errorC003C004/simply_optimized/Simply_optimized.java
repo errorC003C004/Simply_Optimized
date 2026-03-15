@@ -13,8 +13,17 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 /*
+Noted 3-14:
+- Invis + Death means uninvis, relog fixes
+- Invis show player requires relog or death
+- Invis player shows up on locator bar
+- instakill only do base health
+
 Fixed:
--
+- Icon Mismatch
+
+Updated
+- UI
 
 Added:
 - Keybind Menu to UI
@@ -25,13 +34,14 @@ Added:
 -- Instakill Toggle in UI
 -- Armor Bypass in UI
 --- Look TP/Boom/Dupe as Keybind
+---- Keybindings can also be toggled
 
 What to Add:
 - Keybind Edit in UI
-- Keybindings can also be toggled
 
 What to Fix:
--
+- Invis no work
+- instakill only do base health
 
 Ideas:
 - Invis
@@ -63,9 +73,10 @@ public class Simply_optimized implements ModInitializer {
         );
         HandshakeServer.init();
 
+        //
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             LOGGER.info("[SimplyOptimised] Client Version Dectected!");
-            boolean debug = true;
+            boolean debug = false;
             if (!debug) {
                 new Thread(() -> {
                 try {
