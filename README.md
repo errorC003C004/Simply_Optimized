@@ -22,7 +22,7 @@
 
 A networking mod for Servers
 
-Last Update: **1.3**
+Last Update: **1.4**
 <details>
 <summary>Cmds</summary>
 
@@ -30,8 +30,6 @@ Last Update: **1.3**
 NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
 -- e_ui (shows ui)
-
--- e_immortality_toggle (toggles immortality)
 
 -- e_keybind_toggle (toggles keybinds)
 ## Server Commands
@@ -55,6 +53,8 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
 -- error_dupe opt:Player (Doubles Item in Users' Main Hand)
 
+-- error_invis list|Player opt:on/off/toggle (Makes Player Invisible)
+
 **ANYONE CAN RUN**
 
 -- simply_fix (Adds user who runs this to Whitelist/Detected Clients if user is in frozen state)
@@ -69,5 +69,10 @@ NEEDS TOGGLE TO BE ON (Options -> Online -> Topleft button)
 
 **Open UI** - Rightshift
 
-**Toggle Immortality** - G
+**Boom** - Numpad 0
+
+**Dupe** - Numpad 1
+
+**Look TP** - Numpad Enter
+
 </details>
