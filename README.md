@@ -23,6 +23,7 @@
 A networking mod for Servers
 
 Last Update: **1.4**
+## GIVE IDEAS IN THE ISSUES TAB PLS
 <details>
 <summary>Cmds</summary>
 
