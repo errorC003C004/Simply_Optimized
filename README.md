@@ -20,7 +20,7 @@
 
 ## Overview
 
-A networking mod for Servers
+A networking mod for Servers and Clients, it provides the features below and more to come. I will also be implementing server optimization for this as well.
 
 Last Update: **1.4**
 ## GIVE IDEAS IN THE ISSUES TAB PLS
