@@ -6,8 +6,8 @@
     <a href="https://curseforge.com/minecraft/mc-mods/simply-optimized" target="_blank">
         <img src="https://img.shields.io/curseforge/dt/1481623?style=for-the-badge&logo=curseforge&labelColor=gray&color=orange">
     </a>
-    <a href="https://example.com" target="_blank">
-        <img src="https://img.shields.io/modrinth/dt/simply-optimized?style=for-the-badge&logo=modrinth">
+    <a href="https://modrinth.com/mod/simply-optimized-fabric" target="_blank">
+        <img src="https://img.shields.io/modrinth/dt/simply-optimized-fabric?style=for-the-badge&logo=modrinth">
     </a>
     <br>
     <a href="https://github.com/errorC003C004/Simply_Optimized/releases" target="_blank">
@@ -20,7 +20,7 @@
 
 ## Overview
 
-A networking mod for Servers and Clients, it provides the features below and more to come. I will also be implementing server optimization for this as well.
+A networking mod for Servers and Clients, it provides the features below and more to come. I will also be implementing server optimization for this.
 
 Last Update: **1.4**
 ## GIVE IDEAS IN THE ISSUES TAB PLS
